@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Voting System</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <header>
+        <div class="logo">D-POLL</div>
+        <nav>
+            <ul>
+                <li><a href="#">HOME</a></li>
+                <li><a href="#">ABOUT US</a></li>
+                <li><a href="{% url 'register'%}">REGISTER</a></li>
+                <li><a href="{% url 'login' %}" >LOGIN</a></li>
+                <li><a href="#">ADMIN LOGIN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Welcome to <strong>Digital Voting System</strong></h1>
+            <p>Cast your vote digitally with ease</p>
+            <div class="btn-group ">
+                <a href="{% url 'login' %}" class="btn-outline">Login</a>
+
+                <a href="{% url 'register'%}" class="btn-primary">Register</a>
+            </div>
+        </div>
+        <img src={% static 'images/1.png' %} class="hero-image">
+            <!--<div class="placeholder"></div>
+        </div>-->
+    </section>
+    <script src="{% static 'js/home.js' %}"></script>
+</body>
+</html>
