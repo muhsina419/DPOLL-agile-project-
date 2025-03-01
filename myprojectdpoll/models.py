@@ -1,7 +1,9 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import User
 import random
 import string
-from django.contrib.auth.hashers import make_password, check_password
+
 
 class Voter(models.Model):
     full_name = models.CharField(max_length=255)
@@ -9,20 +11,18 @@ class Voter(models.Model):
     phone = models.CharField(max_length=20)
     dob = models.DateField()
     sex = models.CharField(max_length=10)
+    address = models.TextField(max_length=255, blank=True)  
     id_type = models.CharField(max_length=50)
     id_number = models.CharField(max_length=50)
-    id_doc = models.FileField(upload_to="id_docs/", null=True, blank=True)
-    photo = models.FileField(upload_to="photos/", null=True, blank=True)
+    id_doc = models.FileField(upload_to="documents/", null=True, blank=True)
+    photo = models.ImageField(upload_to="images/", null=True, blank=True)
     unique_id = models.CharField(max_length=8, unique=True, blank=True)  # Generated ID
     #password = models.CharField(max_length=128)  # Store hashed password
-    password = models.CharField(max_length=128, null=True, blank=True)  # Temporarily allow blank
-
+    consent = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.unique_id:
             self.unique_id = self.generate_unique_id()
-        if not self.password.startswith('pbkdf2_sha256$'):  # Prevent re-hashing an already hashed password
-            self.password = make_password(self.password)
         super().save(*args, **kwargs)
 
     def generate_unique_id(self):
@@ -38,3 +38,10 @@ class Voter(models.Model):
 
     def __str__(self):
         return self.full_name
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    forget_password_token = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username

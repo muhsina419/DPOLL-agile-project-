@@ -1,3 +1,4 @@
+<!-- filepath: /c:/Users/ABHI/Desktop/DPOLL/dpoll/templates/register.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,36 +18,35 @@
 </head>
 <body class="bg-gray-100">
     <header class="bg-blue-500 p-4">
-        <h1 class="text-white text-2xl font-bold"onclick="window.location.href='{% url 'home' %}';">D-POLL</h1>
+        <h1 class="text-white text-2xl font-bold" onclick="window.location.href='{% url 'home' %}';">D-POLL</h1>
     </header>
-
+   
     <main class="max-w-2xl mx-auto p-6 bg-white mt-6 rounded-lg shadow-md">
         <h2 class="text-3xl font-bold mb-6">Registration Page</h2>
 
         <section>
             <h3 class="text-xl font-semibold mb-4">Personal Information</h3>
-            <form>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="mb-4">
                     <label for="fullname" class="block text-gray-700">Full name</label>
-                    <input id="fullname" type="text" placeholder="ex: Adam" class="w-full p-2 border border-gray-300 rounded">
+                    <input id="fullname" name="fullName" type="text" placeholder="ex: Adam" class="w-full p-2 border border-gray-300 rounded">
                 </div>
 
-                <!-- Email Input Field (Fixed) -->
                 <div class="mb-4">
                     <label class="block text-gray-700">Email address</label>
                     <div class="relative">
                         <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
-                        <input type="email" placeholder="       adrian@jsmastery.pro" 
+                        <input type="email" name="email" placeholder="       adrian@jsmastery.pro" 
                             class="w-full p-2 pl-14 border border-gray-300 rounded">
                     </div>
                 </div>
 
-                <!-- Phone Number Input Field (Fixed) -->
                 <div class="mb-4">
                     <label class="block text-gray-700">Phone number</label>
                     <div class="relative">
                         <i class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
-                        <input type="text" placeholder="     +00 0342 0453 34" 
+                        <input type="text" name="phone" placeholder="     +00 0342 0453 34" 
                             class="w-full p-2 pl-14 border border-gray-300 rounded">
                     </div>
                 </div>
@@ -54,21 +54,21 @@
                 <div class="grid grid-cols-1 md-grid-cols-2 gap-4 mb-4">
                     <div>
                         <label for="dob" class="block text-gray-700">Date of birth</label>
-                        <input id="dob" type="date" class="w-full p-2 border border-gray-300 rounded">
+                        <input id="dob" name="dateOfBirth" type="date" class="w-full p-2 border border-gray-300 rounded">
                     </div>
                     <div>
                         <label class="block text-gray-700">Sex</label>
                         <div class="flex space-x-4">
                             <label class="flex items-center space-x-2">
-                                <input type="radio" name="sex" class="form-radio text-blue-500">
+                                <input type="radio" name="sex" value="Male" class="form-radio text-blue-500">
                                 <span>Male</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="radio" name="sex" class="form-radio text-blue-500">
+                                <input type="radio" name="sex" value="Female" class="form-radio text-blue-500">
                                 <span>Female</span>
                             </label>
                             <label class="flex items-center space-x-2">
-                                <input type="radio" name="sex" class="form-radio text-blue-500">
+                                <input type="radio" name="sex" value="Other" class="form-radio text-blue-500">
                                 <span>Other</span>
                             </label>
                         </div>
@@ -77,14 +77,14 @@
 
                 <div class="mb-4">
                     <label for="address" class="block text-gray-700">Address</label>
-                    <textarea id="address" class="w-full p-2 border border-gray-300 rounded"></textarea>
+                    <textarea id="address" name="address" class="w-full p-2 border border-gray-300 rounded"></textarea>
                 </div>
 
                 <h3 class="text-xl font-semibold mb-4">Identification and Verification</h3>
 
                 <div class="mb-4">
                     <label class="block text-gray-700">Identification type</label>
-                    <select id="identificationInput" class="w-full p-2 border border-gray-300 rounded">
+                    <select id="identificationInput" name="identificationType" class="w-full p-2 border border-gray-300 rounded">
                         <option value="" disabled selected>Select Identification Type</option>
                         <option value="Aadhar Card">Aadhar Card</option>
                         <option value="Voter ID">Voter ID</option>
@@ -93,13 +93,13 @@
 
                 <div class="mb-4">
                     <label for="idNumber" class="block text-gray-700">Identification Number</label>
-                    <input id="idNumber" type="text" placeholder="ex:1234567" class="w-full p-2 border border-gray-300 rounded">
+                    <input id="idNumber" name="identificationNumber" type="text" placeholder="ex:1234567" class="w-full p-2 border border-gray-300 rounded">
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-gray-700">Scanned Copy of Identification Document</label>
                     <label class="border-2 border-dashed border-gray-300 p-4 rounded flex items-center justify-center cursor-pointer">
-                        <input type="file" class="hidden">
+                        <input type="file" name="id_doc" class="hidden">
                         <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
                         <p class="text-gray-400">Click to upload or drag and drop</p>
                     </label>
@@ -108,7 +108,7 @@
                 <div class="mb-4">
                     <label class="block text-gray-700">Scanned Copy of a Valid Photo</label>
                     <label class="border-2 border-dashed border-gray-300 p-4 rounded flex items-center justify-center cursor-pointer">
-                        <input type="file" class="hidden">
+                        <input type="file" name="photo" class="hidden">
                         <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
                         <p class="text-gray-400">Click to upload or drag and drop</p>
                     </label>
@@ -116,7 +116,7 @@
 
                 <div class="mb-4">
                     <label class="flex items-center space-x-2">
-                        <input type="checkbox" class="form-checkbox text-black">
+                        <input type="checkbox" name="consent" class="form-checkbox text-black">
                         <span>I consent to the use and disclosure of my personal information for voting purposes.</span>
                     </label>
                 </div>
@@ -129,12 +129,12 @@
                 </div>
 
                 <div class="mb-6">
-                    <button class="w-full bg-blue-500 text-white p-2 rounded">Submit and continue</button>
+                    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Submit and continue</button>
                 </div>
 
                 <div class="text-center">
                     <p class="mb-2">Already Registered?</p>
-                    <button class="bg-blue-500 text-white p-2 rounded"onclick="window.location.href='{% url 'login' %}';">Login</button>
+                    <button type="button" class="bg-blue-500 text-white p-2 rounded" onclick="window.location.href='{% url 'login' %}';">Login</button>
                 </div>
             </form>
         </section>

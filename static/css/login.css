@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: #000;
+    text-align: center;
+}
+
+/* Header Styling */
+.header {
+    background-color: #4A90E2;
+    padding: 20px;
+    text-align: left;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    padding-left: 20px;
+}
+
+/* Container Layout */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    gap: 50px;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+/* Login and Register Box */
+.login-box, .register-box {
+    background: #4A90E2;
+    padding: 30px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 350px;
+    text-align: left;
+    color: white;
+}
+
+h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+/* Input Group */
+.input-group {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    width: 100%;
+    gap: 8px;
+}
+
+.input-group i {
+    color: #888;
+    font-size: 16px;
+}
+
+.input-group input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: black;
+    font-size: 14px;
+    outline: none;
+    min-width: 0;
+    padding: 8px;
+}
+
+.input-group button {
+    background: #ddd;
+    border: none;
+    color: black;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+.input-group button:hover {
+    background: #4A90E2;
+}
+
+/* Submit and Register Buttons */
+.submit-btn, .register-btn {
+    width: 100%;
+    background: white;
+    border: none;
+    color: black;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: background 0.3s ease;
+}
+
+.submit-btn:hover, .register-btn:hover {
+    background: #4A90E2;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .login-box, .register-box {
+        width: 90%;
+        text-align: center;
+    }
+
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .input-group i {
+        margin-bottom: 5px;
+    }
+
+    .small-btn {
+        margin-top: 5px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .login-box, .register-box {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+}

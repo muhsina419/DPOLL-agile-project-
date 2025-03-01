@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D-POLL Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+    <header>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <h1>D-POLL</h1>
+    </header>
+
+    <div class="container">
+        <nav id="sidebar">
+            <ul>
+                <li><button onclick="navigate('votersList')">Voters List</button></li>
+                <li><button onclick="navigate('candidatesList')">Candidates List</button></li>
+                <li><button onclick="navigate('castVote')">Cast your Vote</button></li>
+                <li><button onclick="navigate('result')">Result</button></li>
+                <li><button onclick="navigate('editDetails')">Edit / Update Details</button></li>
+                <li><button onclick="logout()">Logout</button></li>
+            </ul>
+        </nav>
+
+        <main>
+            <div class="profile">
+                <img src="profile-placeholder.png" alt="User Profile">
+                <div class="details">
+                    <p><strong>Unique Id :</strong> ************</p>
+                    <p><strong>Name :</strong> John Due <span class="age">Age : 49</span></p>
+                    <p><strong>Email :</strong> johndue@gmail.com</p>
+                    <p><strong>Phone no :</strong> 8978549562</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>

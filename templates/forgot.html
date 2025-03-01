@@ -4,20 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/forgot.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
-    <div class="container">
-        <h2>Forgot Password</h2>
-        <p>Enter your email to receive a password reset link.</p>
-        <input type="email" id="email" placeholder="Enter your email" required>
-        <button id="reset-btn">Reset Password</button>
-        <p id="response"></p>
-    </div>
-
-    <script src="{% static 'js/forgot.js' %}"></script>
+    <h1>Forgot Password</h1>
+    <form method="post" action="/forgot/">
+        {% csrf_token %}
+        <label for="unique_id">Unique ID:</label>
+        <input type="text" id="unique_id" name="unique_id" required>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>

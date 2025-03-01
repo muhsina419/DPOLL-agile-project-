@@ -198,3 +198,18 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Static files will be collected here
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "email"
+EMAIL_HOST_PASSWORD = "password"
+
+FRONTEND_URL = "http://127.0.0.1:8000"
+
+MEDIA_URL='/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
+
+
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
