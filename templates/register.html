@@ -1,145 +1,90 @@
-<!-- filepath: /c:/Users/ABHI/Desktop/DPOLL/dpoll/templates/register.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Page</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-    <header class="bg-blue-500 p-4">
-        <h1 class="text-white text-2xl font-bold" onclick="window.location.href='{% url 'home' %}';">D-POLL</h1>
+<body class="bg-light">
+    <header class="bg-primary text-white py-3 px-4">
+        <h1 class="font-weight-bold m-0" style="cursor: pointer;" onclick="window.location.href='{% url 'home' %}';">D-POLL</h1>
     </header>
    
-    <main class="max-w-2xl mx-auto p-6 bg-white mt-6 rounded-lg shadow-md">
-        <h2 class="text-3xl font-bold mb-6">Registration Page</h2>
+    <main class="container mt-4 p-4 bg-white rounded shadow">
+        <h2 class="text-center font-weight-bold">Registration Page</h2>
 
         <section>
-            <h3 class="text-xl font-semibold mb-4">Personal Information</h3>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <label for="fullname" class="block text-gray-700">Full name</label>
-                    <input id="fullname" name="fullName" type="text" placeholder="ex: Adam" class="w-full p-2 border border-gray-300 rounded">
+            <h3 class="font-weight-bold mt-4">Personal Information</h3>
+            <form id="registerForm" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="fullname" class="form-control" required>
                 </div>
-
-                <div class="mb-4">
-                    <label class="block text-gray-700">Email address</label>
-                    <div class="relative">
-                        <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
-                        <input type="email" name="email" placeholder="       adrian@jsmastery.pro" 
-                            class="w-full p-2 pl-14 border border-gray-300 rounded">
-                    </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
                 </div>
-
-                <div class="mb-4">
-                    <label class="block text-gray-700">Phone number</label>
-                    <div class="relative">
-                        <i class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
-                        <input type="text" name="phone" placeholder="     +00 0342 0453 34" 
-                            class="w-full p-2 pl-14 border border-gray-300 rounded">
-                    </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="text" id="phone" name="phone" class="form-control" required>
                 </div>
-
-                <div class="grid grid-cols-1 md-grid-cols-2 gap-4 mb-4">
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="sex">Sex</label>
                     <div>
-                        <label for="dob" class="block text-gray-700">Date of birth</label>
-                        <input id="dob" name="dateOfBirth" type="date" class="w-full p-2 border border-gray-300 rounded">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700">Sex</label>
-                        <div class="flex space-x-4">
-                            <label class="flex items-center space-x-2">
-                                <input type="radio" name="sex" value="Male" class="form-radio text-blue-500">
-                                <span>Male</span>
-                            </label>
-                            <label class="flex items-center space-x-2">
-                                <input type="radio" name="sex" value="Female" class="form-radio text-blue-500">
-                                <span>Female</span>
-                            </label>
-                            <label class="flex items-center space-x-2">
-                                <input type="radio" name="sex" value="Other" class="form-radio text-blue-500">
-                                <span>Other</span>
-                            </label>
-                        </div>
+                        <input type="radio" id="male" name="sex" value="Male" required> Male
+                        <input type="radio" id="female" name="sex" value="Female" required> Female
                     </div>
                 </div>
-
-                <div class="mb-4">
-                    <label for="address" class="block text-gray-700">Address</label>
-                    <textarea id="address" name="address" class="w-full p-2 border border-gray-300 rounded"></textarea>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" class="form-control" required>
                 </div>
-
-                <h3 class="text-xl font-semibold mb-4">Identification and Verification</h3>
-
-                <div class="mb-4">
-                    <label class="block text-gray-700">Identification type</label>
-                    <select id="identificationInput" name="identificationType" class="w-full p-2 border border-gray-300 rounded">
-                        <option value="" disabled selected>Select Identification Type</option>
+                <div class="form-group">
+                    <label for="identificationInput">Identification Type</label>
+                    <select id="identificationInput" name="identificationType" class="form-control" required>
                         <option value="Aadhar Card">Aadhar Card</option>
-                        <option value="Voter ID">Voter ID</option>
+                        <option value="Voter Id">Voter Id</option>
                     </select>
                 </div>
-
-                <div class="mb-4">
-                    <label for="idNumber" class="block text-gray-700">Identification Number</label>
-                    <input id="idNumber" name="identificationNumber" type="text" placeholder="ex:1234567" class="w-full p-2 border border-gray-300 rounded">
+                <div class="form-group">
+                    <label for="idNumber">Identification Number</label>
+                    <input type="text" id="idNumber" name="idNumber" class="form-control" required>
                 </div>
-
-                <div class="mb-4">
-                    <label class="block text-gray-700">Scanned Copy of Identification Document</label>
-                    <label class="border-2 border-dashed border-gray-300 p-4 rounded flex items-center justify-center cursor-pointer">
-                        <input type="file" name="id_doc" class="hidden">
-                        <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
-                        <p class="text-gray-400">Click to upload or drag and drop</p>
-                    </label>
+                <div class="form-group">
+                    <label for="id_doc">ID Document</label>
+                    <input type="file" id="id_doc" name="id_doc" class="form-control-file" required>
                 </div>
-
-                <div class="mb-4">
-                    <label class="block text-gray-700">Scanned Copy of a Valid Photo</label>
-                    <label class="border-2 border-dashed border-gray-300 p-4 rounded flex items-center justify-center cursor-pointer">
-                        <input type="file" name="photo" class="hidden">
-                        <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
-                        <p class="text-gray-400">Click to upload or drag and drop</p>
-                    </label>
+                <div class="form-group">
+                    <label for="photo">Photo</label>
+                    <input type="file" id="photo" name="photo" class="form-control-file" required>
                 </div>
-
-                <div class="mb-4">
-                    <label class="flex items-center space-x-2">
-                        <input type="checkbox" name="consent" class="form-checkbox text-black">
-                        <span>I consent to the use and disclosure of my personal information for voting purposes.</span>
-                    </label>
+                <div class="form-check mb-3">
+                    <input type="checkbox" name="consent" class="form-check-input" id="consent" required>
+                    <label class="form-check-label" for="consent">I consent to the use and disclosure of my personal information for voting purposes.</label>
                 </div>
-
-                <div class="mb-4">
-                    <label class="flex items-center space-x-2">
-                        <input type="checkbox" class="form-checkbox text-blue-500" checked>
-                        <span>I acknowledge that I have reviewed and agree to the privacy policy</span>
-                    </label>
+                <div class="form-check mb-4">
+                    <input type="checkbox" class="form-check-input" id="privacy" checked>
+                    <label class="form-check-label" for="privacy">I acknowledge that I have reviewed and agree to the privacy policy.</label>
                 </div>
-
-                <div class="mb-6">
-                    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Submit and continue</button>
-                </div>
-
-                <div class="text-center">
-                    <p class="mb-2">Already Registered?</p>
-                    <button type="button" class="bg-blue-500 text-white p-2 rounded" onclick="window.location.href='{% url 'login' %}';">Login</button>
+                <button type="submit" class="btn btn-primary btn-block">Submit and Continue</button>
+                <div class="text-center mt-3">
+                    <p>Already Registered?</p>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'login' %}';">Login</button>
                 </div>
             </form>
         </section>
     </main>
-
     <script src="{% static 'js/register.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

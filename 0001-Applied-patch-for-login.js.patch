@@ -1,0 +1,56 @@
+From fe3e892cb5526a290b8387e4a11bf5190a751a0f Mon Sep 17 00:00:00 2001
+From: MUHSINA <muhsinamohammedkutty2003@gmail.com>
+Date: Tue, 25 Feb 2025 00:11:06 +0530
+Subject: [PATCH 1/5] Applied patch for login.js
+
+---
+ static/js/login.js | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 static/js/login.js
+
+diff --git a/static/js/login.js b/static/js/login.js
+new file mode 100644
+index 0000000..25fa5c6
+--- /dev/null
++++ b/static/js/login.js
+@@ -0,0 +1,36 @@
++<script>
++    document.querySelector('.submit-btn').addEventListener('click', function() {
++        const username = document.getElementById('unique-id').value;
++        const password = document.getElementById('password').value;
++
++        fetch('/myprojectdpoll/login/', {
++            method: 'POST',
++            headers: {
++                'Content-Type': 'application/json',
++            },
++            body: JSON.stringify({ username, password }),
++        })
++        .then(response => response.json())
++        .then(data => {
++            if (data.message) {
++                alert(data.message);
++            } else {
++                alert('Error: ' + JSON.stringify(data));
++            }
++        })
++        .catch((error) => {
++            console.error('Error:', error);
++        });
++    });
++    document.querySelector('.submit-btn').addEventListener('click', function() {
++        const username = document.getElementById('unique-id').value;
++        const password = document.getElementById('password').value;
++
++        if (!username || !password) {
++            alert('Please fill in all fields.');
++            return;
++        }
++
++        // Proceed with fetch request...
++    });
++</script>
+\ No newline at end of file
+-- 
+2.45.2.windows.1
+

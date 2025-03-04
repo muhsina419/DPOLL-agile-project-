@@ -1,0 +1,305 @@
+From 03e4d81da59bbf1ca8769bf92d118a43ed4c3618 Mon Sep 17 00:00:00 2001
+From: MUHSINA <muhsinamohammedkutty2003@gmail.com>
+Date: Tue, 25 Feb 2025 00:49:56 +0530
+Subject: [PATCH 3/5] added html files for
+ home,login,register,forgotpassword,register
+
+---
+ templates/forgot.html   |  23 +++++++
+ templates/home.html     |  40 +++++++++++
+ templates/login.html    |  45 ++++++++++++
+ templates/password.html |   0
+ templates/register.html | 148 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 256 insertions(+)
+ create mode 100644 templates/forgot.html
+ create mode 100644 templates/home.html
+ create mode 100644 templates/login.html
+ create mode 100644 templates/password.html
+ create mode 100644 templates/register.html
+
+diff --git a/templates/forgot.html b/templates/forgot.html
+new file mode 100644
+index 0000000..57d1590
+--- /dev/null
++++ b/templates/forgot.html
+@@ -0,0 +1,23 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>Forgot Password</title>
++    {% load static %}
++    <link rel="stylesheet" type="text/css" href="{% static 'css/forgot.css' %}">
++    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
++</head>
++<body>
++
++    <div class="container">
++        <h2>Forgot Password</h2>
++        <p>Enter your email to receive a password reset link.</p>
++        <input type="email" id="email" placeholder="Enter your email" required>
++        <button id="reset-btn">Reset Password</button>
++        <p id="response"></p>
++    </div>
++
++    <script src="{% static 'js/forgot.js' %}"></script>
++</body>
++</html>
+diff --git a/templates/home.html b/templates/home.html
+new file mode 100644
+index 0000000..64063bc
+--- /dev/null
++++ b/templates/home.html
+@@ -0,0 +1,40 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>Digital Voting System</title>
++    {% load static %}
++    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
++</head>
++<body>
++    <header>
++        <div class="logo">D-POLL</div>
++        <nav>
++            <ul>
++                <li><a href="#">HOME</a></li>
++                <li><a href="#">ABOUT US</a></li>
++                <li><a href="{% url 'register'%}">REGISTER</a></li>
++                <li><a href="{% url 'login' %}" >LOGIN</a></li>
++                <li><a href="#">ADMIN LOGIN</a></li>
++            </ul>
++        </nav>
++    </header>
++
++    <section class="hero">
++        <div class="hero-text">
++            <h1>Welcome to <strong>Digital Voting System</strong></h1>
++            <p>Cast your vote digitally with ease</p>
++            <div class="btn-group ">
++                <a href="{% url 'login' %}" class="btn-outline">Login</a>
++
++                <a href="{% url 'register'%}" class="btn-primary">Register</a>
++            </div>
++        </div>
++        <img src={% static 'images/1.png' %} class="hero-image">
++            <!--<div class="placeholder"></div>
++        </div>-->
++    </section>
++    <script src="{% static 'js/home.js' %}"></script>
++</body>
++</html>
+diff --git a/templates/login.html b/templates/login.html
+new file mode 100644
+index 0000000..6cc8144
+--- /dev/null
++++ b/templates/login.html
+@@ -0,0 +1,45 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>D-POLL Login</title>
++    {% load static %}
++    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
++    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
++</head>
++<body>
++    <div class="header">
++        <h1 onclick="window.location.href='{% url 'home' %}';">D-POLL</h1>
++    </div>
++
++    <div class="container">
++        <div class="login-box">
++            <h2>Login</h2>
++            
++            <label for="unique-id">Unique Id</label>
++            <div class="input-group">
++                <i class="fa fa-user"></i>
++                <input type="text" id="unique-id" placeholder="Enter Unique ID">
++                <button class="small-btn">Know your Unique ID</button>
++            </div>
++
++            <label for="password">Password</label>
++            <div class="input-group">
++                <i class="fa fa-lock"></i>
++                <input type="password" id="password" placeholder="Enter Password">
++                <button class="small-btn" onclick="window.location.href='{% url 'forgot' %}';">Forgot Password</button>
++
++            </div>
++
++            <button class="submit-btn">Submit</button>
++        </div>
++
++        <div class="register-box">
++            <h2>New Here?</h2>
++            <button class="register-btn"onclick="window.location.href='{% url 'register' %}';">Register</button>
++        </div>
++    </div>
++    <script src="{% static 'js/login.js' %}"></script>
++</body>
++</html>
+diff --git a/templates/password.html b/templates/password.html
+new file mode 100644
+index 0000000..e69de29
+diff --git a/templates/register.html b/templates/register.html
+new file mode 100644
+index 0000000..62cfe8c
+--- /dev/null
++++ b/templates/register.html
+@@ -0,0 +1,148 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>Registration Page</title>
++    {% load static %}
++    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
++    <!-- Tailwind CSS -->
++    <script src="https://cdn.tailwindcss.com"></script>
++    
++    <!-- FontAwesome for icons -->
++    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
++    
++    <!-- Bootstrap CSS -->
++    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
++</head>
++<body class="bg-gray-100">
++    <header class="bg-blue-500 p-4">
++        <h1 class="text-white text-2xl font-bold"onclick="window.location.href='{% url 'home' %}';">D-POLL</h1>
++    </header>
++
++    <main class="max-w-2xl mx-auto p-6 bg-white mt-6 rounded-lg shadow-md">
++        <h2 class="text-3xl font-bold mb-6">Registration Page</h2>
++
++        <section>
++            <h3 class="text-xl font-semibold mb-4">Personal Information</h3>
++            <form>
++                <div class="mb-4">
++                    <label for="fullname" class="block text-gray-700">Full name</label>
++                    <input id="fullname" type="text" placeholder="ex: Adam" class="w-full p-2 border border-gray-300 rounded">
++                </div>
++
++                <!-- Email Input Field (Fixed) -->
++                <div class="mb-4">
++                    <label class="block text-gray-700">Email address</label>
++                    <div class="relative">
++                        <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
++                        <input type="email" placeholder="       adrian@jsmastery.pro" 
++                            class="w-full p-2 pl-14 border border-gray-300 rounded">
++                    </div>
++                </div>
++
++                <!-- Phone Number Input Field (Fixed) -->
++                <div class="mb-4">
++                    <label class="block text-gray-700">Phone number</label>
++                    <div class="relative">
++                        <i class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
++                        <input type="text" placeholder="     +00 0342 0453 34" 
++                            class="w-full p-2 pl-14 border border-gray-300 rounded">
++                    </div>
++                </div>
++
++                <div class="grid grid-cols-1 md-grid-cols-2 gap-4 mb-4">
++                    <div>
++                        <label for="dob" class="block text-gray-700">Date of birth</label>
++                        <input id="dob" type="date" class="w-full p-2 border border-gray-300 rounded">
++                    </div>
++                    <div>
++                        <label class="block text-gray-700">Sex</label>
++                        <div class="flex space-x-4">
++                            <label class="flex items-center space-x-2">
++                                <input type="radio" name="sex" class="form-radio text-blue-500">
++                                <span>Male</span>
++                            </label>
++                            <label class="flex items-center space-x-2">
++                                <input type="radio" name="sex" class="form-radio text-blue-500">
++                                <span>Female</span>
++                            </label>
++                            <label class="flex items-center space-x-2">
++                                <input type="radio" name="sex" class="form-radio text-blue-500">
++                                <span>Other</span>
++                            </label>
++                        </div>
++                    </div>
++                </div>
++
++                <div class="mb-4">
++                    <label for="address" class="block text-gray-700">Address</label>
++                    <textarea id="address" class="w-full p-2 border border-gray-300 rounded"></textarea>
++                </div>
++
++                <h3 class="text-xl font-semibold mb-4">Identification and Verification</h3>
++
++                <div class="mb-4">
++                    <label class="block text-gray-700">Identification type</label>
++                    <select id="identificationInput" class="w-full p-2 border border-gray-300 rounded">
++                        <option value="" disabled selected>Select Identification Type</option>
++                        <option value="Aadhar Card">Aadhar Card</option>
++                        <option value="Voter ID">Voter ID</option>
++                    </select>
++                </div>
++
++                <div class="mb-4">
++                    <label for="idNumber" class="block text-gray-700">Identification Number</label>
++                    <input id="idNumber" type="text" placeholder="ex:1234567" class="w-full p-2 border border-gray-300 rounded">
++                </div>
++
++                <div class="mb-4">
++                    <label class="block text-gray-700">Scanned Copy of Identification Document</label>
++                    <label class="border-2 border-dashed border-gray-300 p-4 rounded flex items-center justify-center cursor-pointer">
++                        <input type="file" class="hidden">
++                        <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
++                        <p class="text-gray-400">Click to upload or drag and drop</p>
++                    </label>
++                </div>
++
++                <div class="mb-4">
++                    <label class="block text-gray-700">Scanned Copy of a Valid Photo</label>
++                    <label class="border-2 border-dashed border-gray-300 p-4 rounded flex items-center justify-center cursor-pointer">
++                        <input type="file" class="hidden">
++                        <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
++                        <p class="text-gray-400">Click to upload or drag and drop</p>
++                    </label>
++                </div>
++
++                <div class="mb-4">
++                    <label class="flex items-center space-x-2">
++                        <input type="checkbox" class="form-checkbox text-black">
++                        <span>I consent to the use and disclosure of my personal information for voting purposes.</span>
++                    </label>
++                </div>
++
++                <div class="mb-4">
++                    <label class="flex items-center space-x-2">
++                        <input type="checkbox" class="form-checkbox text-blue-500" checked>
++                        <span>I acknowledge that I have reviewed and agree to the privacy policy</span>
++                    </label>
++                </div>
++
++                <div class="mb-6">
++                    <button class="w-full bg-blue-500 text-white p-2 rounded">Submit and continue</button>
++                </div>
++
++                <div class="text-center">
++                    <p class="mb-2">Already Registered?</p>
++                    <button class="bg-blue-500 text-white p-2 rounded"onclick="window.location.href='{% url 'login' %}';">Login</button>
++                </div>
++            </form>
++        </section>
++    </main>
++
++    <script src="{% static 'js/register.js' %}"></script>
++    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
++    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
++    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
++</body>
++</html>
+-- 
+2.45.2.windows.1
+
