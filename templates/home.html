@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Voting System</title>
-    {% load static %}
+    
     <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 </head>
 <body>
@@ -15,7 +16,7 @@
                 <li><a href="#">HOME</a></li>
                 <li><a href="#">ABOUT US</a></li>
                 <li><a href="{% url 'register'%}">REGISTER</a></li>
-                <li><a href="{% url 'login' %}" >LOGIN</a></li>
+                <li><a href="{% url 'login_voter' %}" >LOGIN</a></li>
                 <li><a href="#">ADMIN LOGIN</a></li>
             </ul>
         </nav>
@@ -26,7 +27,7 @@
             <h1>Welcome to <strong>Digital Voting System</strong></h1>
             <p>Cast your vote digitally with ease</p>
             <div class="btn-group ">
-                <a href="{% url 'login' %}" class="btn-outline">Login</a>
+                <a href="{% url 'login_voter' %}" class="btn-outline">Login</a>
 
                 <a href="{% url 'register'%}" class="btn-primary">Register</a>
             </div>

@@ -4,6 +4,7 @@ import string
 import json
 import uuid
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import serializers
@@ -26,6 +27,7 @@ from .util import send_otp
 from datetime import datetime, timedelta
 import pyotp
 from django.core.files.storage import default_storage
+from .forms import SetPasswordForm
 
 
 # **Unique ID Generator**
@@ -40,21 +42,6 @@ def validate_password(password):
     return bool(re.fullmatch(r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password))
 
 
-@csrf_exempt
-def set_password(request):
-    if request.method == "POST":
-        unique_id = request.POST.get("unique_id")
-        password = request.POST.get("password")
-
-        try:
-            voter = Voter.objects.get(unique_id=unique_id)
-            voter.password = make_password(password)
-            voter.save()
-            return JsonResponse({"message": "Password set successfully"}, status=200)
-        except Voter.DoesNotExist:
-            return JsonResponse({"error": "Invalid Unique ID"}, status=400)
-
-    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 # **Serializer for Voter**
@@ -168,8 +155,6 @@ def ForgetPassword(request):
     return render(request, 'forgot.html')
 
 
-def login_voter_view(request):
-    return render(request, 'login.html')
 
 
 def dashboard_view(request):
@@ -200,3 +185,73 @@ def upload_id_document(request, unique_id):
         file_url = request.build_absolute_uri(settings.MEDIA_URL + file_path)
         return JsonResponse({"message": "ID document uploaded successfully", "file_url": file_url})
     return JsonResponse({"error": "Invalid request"}, status=400)
+"""""
+def set_password(request, token):
+    reset_request = get_object_or_404(PasswordReset, token=token, is_active=True)
+
+    if request.method == "POST":
+        form = SetPasswordForm(request.POST)
+        if form.is_valid():
+            user = reset_request.user
+            user.password = make_password(form.cleaned_data["password"])
+            user.save()
+            reset_request.is_active = False
+            reset_request.save()
+            return redirect("login")
+    else:
+        form = SetPasswordForm()
+
+    return render(request, "setpassword.html", {"form": form})
+"""""
+@csrf_exempt
+def set_password(request):
+    if request.method == "POST":
+        unique_id = request.POST.get("unique_id")
+        password = request.POST.get("password")
+
+        if not validate_password(password):  # Ensure password meets criteria
+            return JsonResponse({"error": "Password does not meet security requirements"}, status=400)
+
+        try:
+            voter = Voter.objects.get(unique_id=unique_id)
+            user, created = User.objects.get_or_create(username=unique_id, defaults={"email": voter.email})
+            user.set_password(password)
+            user.save()
+            return JsonResponse({"message": "Password set successfully"}, status=200)
+        except Voter.DoesNotExist:
+            return JsonResponse({"error": "Invalid Unique ID"}, status=400)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+def setpassword(request):
+    return render(request, 'setpassword.html')
+
+   
+
+
+@csrf_exempt
+def login_voter(request):
+    if request.method == 'POST':  # Handle API login
+        try:
+            data = json.loads(request.body)
+            unique_id = data.get('unique_id')
+            password = data.get('password')
+
+            if not unique_id or not password:
+                return JsonResponse({'error': 'Please provide both unique ID and password'}, status=400)
+
+            user = authenticate(username=unique_id, password=password)
+            if user is not None:
+                login(request, user)
+                return JsonResponse({'message': 'Login successful'})
+            else:
+                return JsonResponse({'error': 'Invalid credentials'}, status=401)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+    elif request.method == 'GET':  # Handle login page rendering
+        return render(request, 'login.html')
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

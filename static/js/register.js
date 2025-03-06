@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() { 
     document.getElementById("registerForm").addEventListener("submit", async function (event) {
         event.preventDefault();
 
@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", function() {
         let photoElement = document.getElementById("photo");
         let consentElement = document.getElementById("consent");
 
-        if (!fullNameElement || !emailElement || !phoneElement || !dobElement || !sexElement || !addressElement || !idTypeElement || !idNumberElement || !idDocumentElement || !photoElement || !consentElement) {
+        if (!fullNameElement || !emailElement || !phoneElement || !dobElement || !sexElement || !addressElement || 
+            !idTypeElement || !idNumberElement || !idDocumentElement || !photoElement || !consentElement) {
             alert("All form elements must be present");
             return;
         }
@@ -94,59 +95,58 @@ document.addEventListener("DOMContentLoaded", function() {
         formData.append("identificationType", idType);
         formData.append("identificationNumber", idNumber);
         formData.append("consent", consent);
+        formData.append("id_doc", idDocument);
+        formData.append("photo", photo);
 
-        // Add files if present
-        if (idDocument) formData.append("id_doc", idDocument);
-        if (photo) formData.append("photo", photo);
         try {
             console.log("Sending registration request");
             let response = await fetch("/api/register/", {
                 method: "POST",
                 body: formData
             });
-        
+
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-        
+
             let responseData = await response.json();
             console.log("Response Data:", responseData);
-        
-            //if (response.status === 201) {
-            //    alert(responseData.message);
-              //  let uniqueId = responseData.UniqueId;
-        
-                // Upload files and get URLs
-                //let photoUrl = photo ? await uploadFile("/voters/upload-photo", uniqueId, photo) : null;
-                //let idDocumentUrl = idDocument ? await uploadFile("voters/upload-id", uniqueId, idDocument) : null;
-        
-                
+            alert(responseData.message);
+
+            window.location.href = "http://127.0.0.1:8000/api/setpassword/";
+            
+        } catch (error) {
+            console.error("Error during registration:", error);
+            alert("Something went wrong during registration!");
+        }
     });
 });
 
-async function uploadFile(endpoint, uniqueId, file) {
+
+function uploadFile(endpoint, uniqueId, file) {
     let formData = new FormData();
     formData.append("UniqueId", uniqueId);
     formData.append(file.name.includes("photo") ? "photo" : "id_doc", file);
 
-    try {
-        console.log(`Uploading file to ${endpoint}`);
-        let response = await fetch(endpoint, {
-            method: "POST",
-            body: formData
-        });
+    console.log(`Uploading file to ${endpoint}`);
 
-        let result = await response.json();
-        if (response.status !== 200) {
+    return fetch(endpoint, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.error) {
             alert(result.error);
             return null;
         } else {
             console.log("File uploaded successfully:", result.file_url);
-            return result.file_url;  // Store the returned file URL
+            return result.file_url;
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error("Error during file upload:", error);
         alert("Something went wrong during file upload!");
         return null;
-    }
+    });
 }

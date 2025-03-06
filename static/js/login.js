@@ -7,7 +7,7 @@ document.querySelector('.submit-btn').addEventListener('click', function() {
         return;
     }
 
-    fetch('/api/login/', {
+    fetch('api/login_voter/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ document.querySelector('.submit-btn').addEventListener('click', function() {
     .then(data => {
         if (data.message) {
             alert(data.message);
-            window.location.href = '/dashboard/';  // Redirect to dashboard
+            window.location.href = '/api/otp/';  // Redirect to dashboard
         } else {
             alert('Error: ' + JSON.stringify(data));
         }
