@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}D-POLL{% endblock title %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    {% block styleUrl %}{% endblock styleUrl %}
+
+<header class="topbar">
+    {% block header %}
+        <div class="menu-icon" id="menu-icon" >☰</div>
+        <div class="logo">{% block logo_title %}D-POLL{% endblock logo_title %}</div>
+        <div class="profile-icon">
+          
+            <img id="userImage" src="{{ userprofile.profile_photo.url }}" alt="User Profile" onerror="this.src='{% static 'images/profile-placeholder.png' %}'">
+            <div class="user_profile hidden" id="userDetails">
+                <p><strong>Unique ID:</strong> <span id="userUniqueId"></span></p>
+                <p><strong>Voting Status:</strong><span id="userVotingStatus"></span> </p>
+                <p><strong>Eligibility:</strong> <span id="userEligibility"></span></p>
+            </div>
+          
+        </div>
+    {% endblock header %}
+</header>
+
+<div id="sidebar" class="sidebar">
+    <ul>
+        <li data-link="{% url 'voters_list' %}">Voters List</li>
+        <li data-link="{% url 'candidates_list' %}">Candidates List</li>
+        <li data-link="{% url 'cast_vote' %}">Cast Vote</li>
+        <li data-link="{% url 'results' %}">Results</li>
+        <li data-link="{% url 'logout' %}">Logout</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    {% block content %}
+    {% endblock content %}
+</div>
+
+
+
+<footer>
+    {% block footer %}
+    <p>&copy; 2025 D-POLL. All rights reserved.</p>
+    {% endblock footer %}
+</footer>
+<script defer src="{% static 'js/base.js' %}"></script>
+{% block script %}
+{% endblock script %}
+{% comment %} </body>
+</html> {% endcomment %}

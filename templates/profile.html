@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - D-POLL</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+    <header>
+        <div class="menu-icon" onclick="window.location.href='/dashboard/'">D-POLL</div>
+        <h1 class="logo">Profile</h1>
+    </header>
+    <main>
+        <div class="profile">
+            <img src="{{ user.photo }}" alt="User Profile" onerror="this.src='{% static 'images/profile-placeholder.png' %}'">
+            <div class="details">
+                <p><strong>Unique Id:</strong> {{ user.unique_id }}</p>
+                <p><strong>Name:</strong> {{ user.name }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Phone:</strong> {{ user.phone }}</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% load static %}
+
+{% block title %}Registration Success{% endblock title %}
+
+{% block styleUrl %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/reg_success.css' %}">
+{% endblock styleUrl %}
+
+{% block header %}{% endblock header %}
+
+{% block content %}
+<div class="header">D-POLL</div>
+
+<div class="container">
+  <div class="checkmark">✔</div>
+  <h1>Registration Completed successfully 🎉</h1>
+
+  <div class="unique-id-box">
+    <label>Your Unique Id:</label>
+    <div class="id-display">
+      <span class="icon">👤</span>
+      <input type="text" id="uniqueId" value="{{ unique_id }}" readonly>
+    </div>
+  </div>
+
+  <p class="note">
+    Please note down the unique id number. It will be required every time you login to the application.
+  </p>
+  <button id="gotoDashboard" class="dashboard-btn">Go to Dashboard</button>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // If unique_id is not rendered by Django, get it from the URL
+    const params = new URLSearchParams(window.location.search);
+    const uniqueId = params.get("unique_id");
+    if (uniqueId) {
+        document.getElementById("uniqueId").value = uniqueId;
+    }
+});
+</script>
+<script src="{% static 'js/reg_success.js' %}"></script>
+{% endblock script %}

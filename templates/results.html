@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D-Poll - Candidates List</title>
+  
+  
+</head>
+<body> {% endcomment %}
+
+{% block styleUrl %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/results.css' %}">
+{% endblock styleUrl %}
+
+  {% comment %} <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="hamburger">&#9776;</div>
+      <div class="logo">D-POLL</div>
+      <div class="profile-img">
+        <img src="https://i.pravatar.cc/40" alt="Profile" />
+      </div>
+    </nav>
+  </header> {% endcomment %}
+
+
+  {% block content %}
+    <main>
+    <h1 class="main-title">Voting Statistics</h1>
+    <p class="subtitle">Track the voting trends</p>
+
+    <!-- Statistics Cards -->
+    <div class="stats-container" id="stats-container">
+      <canvas id="votesChart" width="400" height="200"></canvas>
+      <!-- Dynamic cards inserted by JS -->
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-section">
+      <h3>Voting Trends</h3>
+      <canvas id="votesChart" width="400" height="200"></canvas>
+    </div>
+  </main>
+  {% endblock content %}
+
+  {% 
+  {% block script %}
+    <script src="{% static 'js/results.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  {% endblock script %}
+    %}
+ 

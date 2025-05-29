@@ -1,0 +1,8 @@
+<h2>Results for: {{ poll.title }}</h2>
+<ul>
+  {% for result in results %}
+    <li>
+      {{ result.candidate.name }}: {{ result.votes }} votes
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Candidates List
+{% endblock title %}
+
+{% block styleUrl %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/candidates_list.css' %}">
+{% endblock styleUrl %}
+
+  {% block content %}
+  <div class="main-content">
+    <h2>Candidates List</h2>
+    <input type="text" id="search-input" placeholder="Search candidates..." />
+
+    <table class="candidate-table">
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Candidate Name</th>
+          <th>Candidate Representation</th>
+          <th>Symbol</th>
+        </tr>
+      </thead>
+      <tbody id="candidate-body">
+        {% for candidate in candidates %}
+        <tr>
+          <td>
+            {% if candidate.photo %}
+              <img src="{{ candidate.photo.url }}" alt="{{ candidate.name }}" />
+            {% else %}
+              <img src="https://via.placeholder.com/40" alt="Placeholder Photo" />
+            {% endif %}
+          </td>
+          <td>{{ candidate.name }}</td>
+          <td>{{ candidate.representation }}</td>
+          <td>
+            {% if candidate.symbol %}
+              <img src="{{ candidate.symbol.url }}" alt="Symbol" class="symbol" />
+            {% else %}
+              <img src="https://via.placeholder.com/30" alt="Placeholder Symbol" />
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">No candidates found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endblock content %}
+    
+
+  
+  {% block script %}
+  <script src="{% static 'js/candidates_list.js' %}"></script>
+  {% endblock script %}
+    
+{% comment %} </body>
+</html> {% endcomment %}

@@ -1,0 +1,55 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fff;
+  color: #111;
+  text-align: center;
+}
+
+.header {
+  background-color: #4a90e2;
+  color: white;
+  padding: 20px;
+  font-weight: bold;
+  font-size: 24px;
+  font-family: monospace;
+  letter-spacing: 2px;
+}
+
+.container {
+  margin: 50px auto;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.error-icon {
+  font-size: 48px;
+  color: #4a90e2;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.try-again-btn {
+  background-color: #4a90e2;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.try-again-btn:hover {
+  background-color: #3b78c3;
+}

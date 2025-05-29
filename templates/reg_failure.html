@@ -1,0 +1,24 @@
+{% load static %}
+
+{% block title %}Registration Failed{% endblock title %}
+
+{% block styleUrl %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/reg_failure.css' %}">
+{% endblock styleUrl %}
+
+{% block header %}{% endblock header %}
+
+{% block content %}
+<div class="header">D-POLL</div>
+
+<div class="container">
+  <div class="error-icon">✖</div>
+  <h1>Registration Failed!</h1>
+
+  <button class="try-again-btn" onclick="retry()">Try Again</button>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/reg_failure.js' %}"></script>
+{% endblock script %}

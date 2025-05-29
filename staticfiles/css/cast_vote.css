@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .voting-container {
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+  }
+  
+  .voting-container h2 {
+    color: #4A90E2;
+    margin-bottom: 0.5rem;
+  }
+  
+  .voting-container p {
+    margin-bottom: 1.5rem;
+    color: #555;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+  }
+  
+  th, td {
+    text-align: center;
+    padding: 12px;
+    border: 1px solid #ddd;
+  }
+  
+  .avatar, .symbol-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .button-group {
+    text-align: center;
+  }
+  
+  .submit-btn, .clear-btn {
+    padding: 10px 20px;
+    border: none;
+    margin: 0 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .submit-btn {
+    background-color: #4A90E2;
+    color: white;
+  }
+  
+  .clear-btn {
+    background-color: #ccc;
+    color: #333;
+  }
+  

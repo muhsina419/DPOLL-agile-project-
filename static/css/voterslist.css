@@ -1,0 +1,70 @@
+* body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: white;
+}
+
+/* Main content */
+.main {
+  padding: 40px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.search-box {
+  width: 300px;
+  padding: 10px;
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table-header, .table-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 3fr; /* Adjust column sizes as needed */
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.table-header {
+  font-weight: bold;
+  background-color: #f4f4f4;
+}
+
+.table-row {
+  transition: background-color 0.3s ease;
+}
+
+.table-row:hover {
+  background-color: #e9f5ff;
+}
+
+.photo-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo {
+  width: 50px; /* Set the desired width */
+  height: 50px; /* Set the desired height */
+  border-radius: 50%; /* Make the photo circular */
+  object-fit: cover; /* Ensure the photo fits within the dimensions */
+  border: 2px solid #ddd;
+}
+
+.uid, .name {
+  padding-left: 10px;
+  font-size: 14px;
+  color: #333;
+}

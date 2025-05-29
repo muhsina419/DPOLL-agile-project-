@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vote Failed | D-POLL{% endblock title %}
+
+{% block styleUrl %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/voting_failure.css' %}">
+{% endblock styleUrl %}
+
+{% block content %}
+<main class="failure-container">
+    <div class="crossmark">❌</div>
+    <h2>Oops!</h2>
+    <p class="failure-text">Your vote could not be recorded. Please try again.</p>
+
+    <div class="failure-info">
+      <div class="info-row"><span>Reason :</span> <span>Network Error</span></div>
+      <div class="info-row"><span>Date And Time :</span> <span id="dateTime"></span></div>
+    </div>
+
+    <button onclick="retryVote()">Try Again</button>
+</main>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/voting_failure.js' %}"></script>
+{% endblock script %}

@@ -1,0 +1,2370 @@
+From 0084e87bd257f042199a6ce32d9f28f54f16aa95 Mon Sep 17 00:00:00 2001
+From: Abhinandana <abhinandu8589@gmail.com>
+Date: Sat, 1 Mar 2025 23:59:54 +0530
+Subject: [PATCH 4/5] upto registration_Page
+
+---
+ .vscode/settings.json                         |  11 +
+ db.sqlite3                                    | Bin 0 -> 131072 bytes
+ dpoll/__pycache__/settings.cpython-311.pyc    | Bin 3691 -> 4126 bytes
+ dpoll/__pycache__/urls.cpython-311.pyc        | Bin 1735 -> 1702 bytes
+ dpoll/settings.py                             |  15 ++
+ dpoll/urls.py                                 |  48 ++---
+ index.html                                    |   8 -
+ .../__pycache__/helpers.cpython-311.pyc       | Bin 0 -> 773 bytes
+ .../__pycache__/models.cpython-311.pyc        | Bin 3188 -> 3809 bytes
+ .../__pycache__/urls.cpython-311.pyc          | Bin 686 -> 1734 bytes
+ .../__pycache__/views.cpython-311.pyc         | Bin 9016 -> 14700 bytes
+ myprojectdpoll/forms.py                       |   9 +
+ myprojectdpoll/helpers.py                     |  13 ++
+ .../migrations/0004_alter_voter_password.py   |  18 ++
+ ...005_remove_voter_password_voter_consent.py |  22 ++
+ myprojectdpoll/migrations/0006_profile.py     |  24 +++
+ ...07_alter_voter_id_doc_alter_voter_photo.py |  23 +++
+ .../migrations/0008_alter_voter_id_doc.py     |  18 ++
+ .../migrations/0009_voter_address.py          |  18 ++
+ .../0004_alter_voter_password.cpython-311.pyc | Bin 0 -> 863 bytes
+ ...ter_password_voter_consent.cpython-311.pyc | Bin 0 -> 942 bytes
+ .../__pycache__/0006_profile.cpython-311.pyc  | Bin 0 -> 1443 bytes
+ ...r_id_doc_alter_voter_photo.cpython-311.pyc | Bin 0 -> 1003 bytes
+ .../0008_alter_voter_id_doc.cpython-311.pyc   | Bin 0 -> 875 bytes
+ .../0009_voter_address.cpython-311.pyc        | Bin 0 -> 834 bytes
+ myprojectdpoll/models.py                      |  21 +-
+ myprojectdpoll/urls.py                        |  22 +-
+ myprojectdpoll/views.py                       | 190 +++++++++++++-----
+ static/css/dashboard.css                      |  91 +++++++++
+ static/css/forgot.css                         |  42 ++++
+ static/css/home.css                           | 148 ++++++++++++++
+ static/css/login.css                          | 166 +++++++++++++++
+ static/css/password.css                       |  65 ++++++
+ static/css/register.css                       |   3 +
+ static/js/dashboard.js                        |  13 ++
+ static/js/login.js                            |  57 +++---
+ static/js/password.js                         |  22 ++
+ templates/changepass.html                     |  20 ++
+ templates/dashboard.html                      |  43 ++++
+ templates/forgot.html                         |  22 +-
+ templates/otp.html                            |   0
+ templates/password.html                       |  31 +++
+ templates/password_reset_complete.html        |   2 +
+ templates/password_reset_confirm.html         |  16 ++
+ templates/register.html                       |  42 ++--
+ 45 files changed, 1075 insertions(+), 168 deletions(-)
+ create mode 100644 .vscode/settings.json
+ create mode 100644 db.sqlite3
+ delete mode 100644 index.html
+ create mode 100644 myprojectdpoll/__pycache__/helpers.cpython-311.pyc
+ create mode 100644 myprojectdpoll/forms.py
+ create mode 100644 myprojectdpoll/helpers.py
+ create mode 100644 myprojectdpoll/migrations/0004_alter_voter_password.py
+ create mode 100644 myprojectdpoll/migrations/0005_remove_voter_password_voter_consent.py
+ create mode 100644 myprojectdpoll/migrations/0006_profile.py
+ create mode 100644 myprojectdpoll/migrations/0007_alter_voter_id_doc_alter_voter_photo.py
+ create mode 100644 myprojectdpoll/migrations/0008_alter_voter_id_doc.py
+ create mode 100644 myprojectdpoll/migrations/0009_voter_address.py
+ create mode 100644 myprojectdpoll/migrations/__pycache__/0004_alter_voter_password.cpython-311.pyc
+ create mode 100644 myprojectdpoll/migrations/__pycache__/0005_remove_voter_password_voter_consent.cpython-311.pyc
+ create mode 100644 myprojectdpoll/migrations/__pycache__/0006_profile.cpython-311.pyc
+ create mode 100644 myprojectdpoll/migrations/__pycache__/0007_alter_voter_id_doc_alter_voter_photo.cpython-311.pyc
+ create mode 100644 myprojectdpoll/migrations/__pycache__/0008_alter_voter_id_doc.cpython-311.pyc
+ create mode 100644 myprojectdpoll/migrations/__pycache__/0009_voter_address.cpython-311.pyc
+ create mode 100644 static/css/dashboard.css
+ create mode 100644 static/css/forgot.css
+ create mode 100644 static/css/home.css
+ create mode 100644 static/css/login.css
+ create mode 100644 static/css/password.css
+ create mode 100644 static/css/register.css
+ create mode 100644 static/js/dashboard.js
+ create mode 100644 static/js/password.js
+ create mode 100644 templates/changepass.html
+ create mode 100644 templates/dashboard.html
+ create mode 100644 templates/otp.html
+ create mode 100644 templates/password_reset_complete.html
+ create mode 100644 templates/password_reset_confirm.html
+
+diff --git a/.vscode/settings.json b/.vscode/settings.json
+new file mode 100644
+index 0000000..65d939f
+--- /dev/null
++++ b/.vscode/settings.json
+@@ -0,0 +1,11 @@
++{
++    "python.testing.unittestArgs": [
++        "-v",
++        "-s",
++        ".",
++        "-p",
++        "*test.py"
++    ],
++    "python.testing.pytestEnabled": false,
++    "python.testing.unittestEnabled": true
++}
+\ No newline at end of file
+diff --git a/db.sqlite3 b/db.sqlite3
+new file mode 100644
+index 0000000000000000000000000000000000000000..f65e353f8464b297ce8a355c61110c7f49ccecf1
+GIT binary patch
+literal 131072
+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
+P1V8`;KmY_D4+8%OTBxBN
+
+literal 0
+HcmV?d00001
+
+diff --git a/dpoll/__pycache__/settings.cpython-311.pyc b/dpoll/__pycache__/settings.cpython-311.pyc
+index 494816d228bafcdaf5938608eb6976506ddd8636..6546b75f3f08cb460472c6eb29c2124661715834 100644
+GIT binary patch
+delta 500
+zcmaDYGf#nUIWI340}$wV98O;^Hjz()$%uKQ##JVHwJ6mT^(eIzjVSdL_9%@M%_z+j
+ztthP&?I`UOohY5jeN3vdy33dt7*+!@1VrhkXs0tq>7_6SGid5<W@6@LudmWh$x6&i
+z&(}-NFG|(RP0Y;EOG-@6PR&ax)+^2}DbRBTi8(=ps`$V{>0o8a`MH_iK(lYLrh@pl
+zI0_Pri_7ziQmRBVN=gc>^z{vm%=HX_(9p`lz`&r2T|YN9B{Na~7Au(6)W5|ZKUsw9
+z2WycW(0!A|xF^)#;&t_P^z?~$a&-1~^>ew!1>t)52ZzAe0scWDFlC{^uJIv0!MFGk
+z%Hn}yLAQjF1Ogm`gTwuUTyF8W1^N4h0F8|g4f46g>Fes^=?G?WL6|}Q68<5#M4W?z
+z+~PxmLW4tGUE=+NJl#G0f+sKIcIWZ~x{?uyi??t7&YjH^@<710f%gWlYy;N~UI8E>
+zAOhqHNjC7`5L39oApC$|t%2tOmv95;4Q}2Z^M0Eyn;9Gn)Gu;tUE$Vh;QGMEAZc(x
+P+~5L(2m}@R0L=yfA1{|D
+
+delta 92
+zcmbQI@LGm%IWI340}$-Z+LP`nI+0I;=^E2UjjK$o%)tzrYMbMjdD)pXRVP2^`ptEV
+sqad-kxIDioW%6_G36uGF-MO5AIvIhuIA?P_Z#ENW19t;=kpoZw0Lj7`8vp<R
+
+diff --git a/dpoll/__pycache__/urls.cpython-311.pyc b/dpoll/__pycache__/urls.cpython-311.pyc
+index ba9065d03f7e640bc5fecfdcafeaa1a8c65b2d79..5a44d4d7321860f88f1a9a6ab0711f569cb52098 100644
+GIT binary patch
+literal 1702
+zcmb7EO>Y`U7@mdU+n8XC!4{Q6L#w!|*i>z;Dnf4TkPl*~U^lMX6%r!s7?$h@o?RM+
+zUVP{wM^r_sk3PAok{{4}|G=&_lF?ps>J2HkoI111Hpb!53^U6!&-2dn?z}VbM?4+{
+zwEc4R@AelEfY)r|wb%r_x$XntcOU|hlYzns9LKOv_9=eBuRsAhbH5x=f<n;2P!1_!
+zA?)CQ98sb|%)vo<PKgU~4)_4_iy_2y=e=azgojRPwwH9c&4~=7xEOgAJ@r$CjtfeR
+z>QJ0J<)}i3+h#b#QLKB#(@&Bfy7+xcColga#QB-|64YnG3;JI^S7!PosZZ*Id=_T<
+zq^Qs02l*^s_GyQNGzxZ?JQtipX<F4V<uV>ean{4H($n=F!~qb};?nnkjkU}_EO3pp
+z15Htp)HR<CdrhNbha|Nn_eDgNu#OBvQrkMkLEUH?Qj5j^ETN~2f*nmkgP^mVw*ij0
+zeo$>v8a8_pKS(LhdRXhCmLc{uSuXamtPc{srmjELu-L$eX5j7lX=1QAJ?BMDMZBGw
+zW*dwhWL%3<UlJd$f3?Av4DAV0H+XyLQglmG4<xJ%V(tRhGV@-L(vy+F_8u3tR$oD?
+z(ZHH!e7Cl2&x_rr+SZEH$-vTM%r3Ycn~-c{nEo&U4qT*JRvctZ=H2Q8rwm26pg6?T
+z)H{`V7n^;fgTqXTGT3lRZZBS{ro%dAx1lZ>$cF4S>|||H-#u2|ALwb>p{DM5*y$;)
+zOiSqK*(v(ATPsIdzNEMXa-<l|Mz4&4u&UdE@|~^ydv@gEopNQfvA?%tM_ssAtv>n_
+zyrFvmZ~5Cd>-##wdVO>2ex+VU`V&Lz)yuW&&Q9IAA(JQDN3r+pZMdXpVqZoZ_*1%`
+z{c-5O(dXFDaoh-8HK+Rsd}7Y(vm!q;!BiiCFU{%xzS}qm0+FNg^X%~J7dKygYr$&-
+zUK_zMr52t)Iu4p})q<-8uDaaPFf+`U%S9{6lO%7!8wB2%SeTKO;|C=7&3W$DS?-pV
+z+akFwv+|P(1q%uU3XXvpSv^@H`OWiu<t$&Z^4lc8ZSJ*A*s)-Tz|JJ-<C6!ZaPPcO
+zJu6hL!Y(Q7nm_hTcxb^x0uS9+`RF)GvZeEE`7B$uvUf@LuKDo5gl!A932cv3(S+|P
+zHeLa6?$?bm;J96G1QWyc;rj7)vhw*~_erU0rfOEIM(7jPj<(r{ox(2XhT{S~n|}f5
+CQq9i*
+
+literal 1735
+zcmb_cO>Y}T7@l>;U+dTj4WAW<feIX_?yg#?Jy^6TjT34S0csKgTMKvN9ouVmcdVH;
+zG!aNSaL6%-O7s^5q4ozL@h5D_2WwAAoRBzJ>a8c<*$>sJic}=VGvjyPdFOeb_nF!K
+zrC3xEw7-A+y*tbx^rw7CTDSraPrp$R`WacsK$c>q9K}r;DMi`~&Vq{#?52%$_>7&5
+zn>Dhbopy3=-pGe`#!=mZQBY6{QEX*ts=t^d=@%30EQQcx7*Pu&b1<i^{2Anb3?phU
+zi=$afeNs4EfH)XY`~P!w(?*Hr`%6g%{yr^1mIC;e6Cc>GCAOu!lbGnq;(6XjP`6RC
+ziaSV-O3C~IN>}&pZj(0iI(B!+P2Xl7=`c>L0dpKO;H*#EzNV_XJxcBmxic_*pK?#!
+zCyp(A!r9QLf&hjfJ|o}R^n0O^EdX#Cr^NOE%Z*S64mAZOg3_8wp!IxzAZog9v9{2x
+zzUg&YlCI5MoqGCp?W*pxf!!9m4AvpN(ACWcrVCi2rfv<rc1So(8-iZd$hu__(<8P!
+zVBD_}(&5Y{?qSOu3}R<QGmO6$$IA+20dp0?Rw%Z&S}s@Px_Zo|RpOa0y;+uaxuR}3
+zrVv*SpfGC=_1{=9zel+wqJ@kTI(Go;zp#<<nkiZmWVP}FqlVXZhL-JhL4+`$EKQzo
+zqE90fh5!{f9vMqlE2I-kS&QU~jzg1zCnV$8YADJpvpsNFR|f%;Ol9c^am$s8`j@<_
+z6(vZUmTP;JRDh-8K{k$-E4F9R2Vmp`^?j&HfSnOOT&ea^Cfue6=xD_~jPFi(Z^Hxu
+zmS+UvSe_XC7vZK2UF!KQ&Y1sM<wB5cwZPYE1*N!P(8=fa0hcdyP?%GJWAN~_bie*W
+zuJ9;1e8`^fkaF{^^t|;PxD&F{BJMmVSFx~t8el1NP?)=VLAt(qd+(D#-Pv8=ZEUpQ
+z1cT+s-fC=b?zHNSyF0(4r+|T;=^M4?o}gSb*KglxH0xA+3olKx{>A6p+s#mpc$R6j
+z!Qr#qM=rC54!y<Sh5hmyC)Qw|EhvgIOD!pQhU9b&DesLCneS8d!RTduias2j@6+=e
+z0c48SM(6u1htm1u`pMg;*B{m%emusPCiv16=fHL0WdCG;^v2q_czII1JjT@tuKp3P
+z>^*vOgvl6_2_{kWD+0`l*`?HRVYZC$;!n3`NKx)7Q@nI~<MhU()yc&xzkM~i`Q>OI
+c=C4O9#(2e;z>JOKPvuXlb5Dsj@r$6@Ki&oJOaK4?
+
+diff --git a/dpoll/settings.py b/dpoll/settings.py
+index 02dde2c..bc002f4 100644
+--- a/dpoll/settings.py
++++ b/dpoll/settings.py
+@@ -198,3 +198,18 @@ STATIC_URL = '/static/'
+ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+ 
+ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Static files will be collected here
++
++EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
++EMAIL_HOST = "smtp.gmail.com"
++EMAIL_PORT = 587
++EMAIL_USE_TLS = True
++EMAIL_HOST_USER = "email"
++EMAIL_HOST_PASSWORD = "password"
++
++FRONTEND_URL = "http://127.0.0.1:8000"
++
++MEDIA_URL='/media/'
++MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
++
++
++CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+\ No newline at end of file
+diff --git a/dpoll/urls.py b/dpoll/urls.py
+index 77801b3..25f7e23 100644
+--- a/dpoll/urls.py
++++ b/dpoll/urls.py
+@@ -1,44 +1,22 @@
+-"""
+-URL configuration for dpoll project.
+-
+-The `urlpatterns` list routes URLs to views. For more information please see:
+-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
+-Examples:
+-Function views
+-    1. Add an import:  from my_app import views
+-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+-Class-based views
+-    1. Add an import:  from other_app.views import Home
+-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+-Including another URLconf
+-    1. Import the include() function: from django.urls import include, path
+-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+-"""
+-
+-#from django.contrib import admin
+-#from django.urls import path, include
+-
+-#urlpatterns = [
+- #   path('admin/', admin.site.urls),
+-  #  path('mymyprojectdpoll/', include('myprojectdpoll.urls')),
+-#]
+-
+ from django.contrib import admin
+ from django.urls import path, include
+-from myprojectdpoll.views import index  # Import a view for the homepage
+ from django.conf import settings
+ from django.conf.urls.static import static
+-
++from django.contrib.auth import views as auth_views
++from myprojectdpoll.views import home  # Import the homepage view
+ 
+ urlpatterns = [
+     path('admin/', admin.site.urls),
+-    path("", include("myprojectdpoll.urls")), 
+-    #path('mymyprojectdpoll/', include('myprojectdpoll.urls')),  # Ensure this is correctly configured
+-    path('', index, name='home'),  # Add this line for the root URL
+-    path('admin/', admin.site.urls),
+-    path('', include('myprojectdpoll.urls')),  # Include URLs from the voting app
++    path('', home, name='home'),  # Root URL for homepage
++    path('api/', include('myprojectdpoll.urls')),  # Namespace for the voting app
++    
++    # Password Reset URLs
++    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
++    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
++    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
++    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+ ]
+-if settings.DEBUG:  # Serve static files only in development
+-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+-
+ 
++# Serve media files in development mode
++if settings.DEBUG:
++    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+diff --git a/index.html b/index.html
+deleted file mode 100644
+index 3aa9464..0000000
+--- a/index.html
++++ /dev/null
+@@ -1,8 +0,0 @@
+-echo "<!DOCTYPE html>" > index.html
+-echo "<html>" >> index.html
+-echo "<head><title>My Project</title></head>" >> index.html
+-echo "<body>" >> index.html
+-echo "<h1>Welcome to my project!</h1>" >> index.html
+-echo "<h2>Enjoy exploring!</h2>" >> index.html
+-echo "</body>" >> index.html
+-echo "</html>" >> index.html
+diff --git a/myprojectdpoll/__pycache__/helpers.cpython-311.pyc b/myprojectdpoll/__pycache__/helpers.cpython-311.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..d20f412afde4078c9a25e5d7b73cb6e06f7fa8a5
+GIT binary patch
+literal 773
+zcmZWn&1(}u6rb6Tw6-)&L4@FC4<amRk`_TpL~LzoD>W6{qLzgacc+_8c6XMUDWPQp
+zIe6%?HxD9s@&j+;AK;%5p@*<gD0uQ#=q)GTY}`We?R$^+-oCH-&3vAjnL<E6x<B3T
+z7@^<N$w>KUT-*ZV9deL^eH7qbjHRvkN}%qlV5@J@uI6Z4$khMH5)&uaI0>Cb(DZz8
+zCOHwp3tet!9c5MyL<PBc1q!<3p5iDmeh>XVs6ACcG@~|bHm05yBNz8{p=S|<VkK5%
+zE!ID22z>(?6YQ04R6i`fru)p;qs%43h?<;tDRT_p3p<C~Yo2k(uzk<&7&J6Qi==Tw
+zP=gWJ+BlG<mo+URqH4K3zi_`)fp5P0pi-%n?N&2%$=xigJi_H|Q)P0KWOn7*;`&Bo
+zZF6h8v9q=Eg2@w`xkM)tn?x71L&9W&@4smiTO<<!;k@aRWGemN*kd$E@{HJC<dIM`
+ze2)t*fiqGX)t*$X9Zndx7MIr6t!2VHf=1Tz^UaM7%ZaG(TfsrZsBAuVTf~nbzZ4xL
+z#q^HGxHPiu(>r6cFk%9PKL*uD!@SvF9p-}pX%9fB++RJNE1t}m{inklH;-TT>!;ex
+zk$c?zIQ6CeORJq|wSiU}PR}0QyMP|3Zt6+FX#-NUWK%{;^86_p$@FD7+)GhQ$A3kv
+x0Cg-6YBc#Upw7Ne9<l4-%Gbb`K%J`?<1=)7aFx%HF}TX-xg0K>qyJSp<1bSY)4Biv
+
+literal 0
+HcmV?d00001
+
+diff --git a/myprojectdpoll/__pycache__/models.cpython-311.pyc b/myprojectdpoll/__pycache__/models.cpython-311.pyc
+index f9758f2b32075f9c590c53555a384e5990589839..7ae0268d2d292a9b9f70cb072c4ba81b0c57a8ea 100644
+GIT binary patch
+delta 1800
+zcmah}O=ufO6rR~#X;*(M|Nljft+a`wHrQ^Px{YgMoY*o3$8C|D!xk!J&&rm((uP@y
+zrmjJP_@EY3Fk48WmmY!>6CVOC#q?4`FFmxdDmsY0m7aVEDAbqq)Hf^1PV7S8?tc5;
+z%=h-adGltEdj9N}9|i(m1k!Wumz6bfTka`*3D$i?5WyPCU<G5Qa~hZ76+R;<f@AZV
+zE8|w&jxK1TA_7OyBt_!TEF!K=MBFM)d)Swm?C=OZhNmuy*I|jklFqOOPiQ_O#8AX@
+z$h;!hc4u^=YR2~0VJ}$1M}|rlmbY6w@gLj2{Z#NbJ`Q;keox%tAR;_<Q34!N`Lxiq
+ziL}S<U|_)0V95W=2s(_GrU&s59wK?`Yb!K|l~#w=*0hQ5MOt%IX+IUt@2~==3f1AT
+zI-6cZ-V2^eyQ_qfn6zvTNJ=+p-9$<cX#?yf?SOqHbQde<poksjJ#M5w!cn%_wrfdC
+zWY-Sg1by90^yPd;&F0LXxz154voSH1Nvx>G$e{#Qgm;{%4|Hcb3e^{hnoQ)ioY}&6
+z;dOI}pM8%*ITuhGvIFnOO#`KmH+2K2&<6Jaf93R54DI5Dh+qx~gQg<fb9aM>F=hTG
+zy!!ncu5U5!GJkhp$CBw6$2z*$9NWP`5PBXI+HKwzpLbDKA6OcTZcBF(hViLRiTR22
+zMVm8&ZBH_<Y4L0#qwbo|r5iY8PIyx7o<;R;E}Bv`Vv7kvsA?GI1JC72?;KlweZqBT
+zRnO^^#kT!7bX`*u*@nxqo;9FswAaam0ZV|6nNK|zgRF3r0eg(J8TNiIzw%_!lE=&P
+zctsvB&YGt8ts(#Z)q|WBm@fzBD}ni9wCe9KMJxXPN1lD*VA}G}mHl%S|D5^M8yb<r
+zrDR18Ke}kiqh)!tB99hlYXa}OR73v(UUR}X<6_a-5#d)6+O~QNstZnm8wMTO!>3M(
+z=(HPia)fYBQwpb=(!<WT;w5hAE72A|pn5W;sn8T2JsXD;s^-)~0v}jxb`I+)+6quu
+zK0a??F`f0r-+ci0(FRJxyDsTtUJNz1*B0_{;BAQ^+e!L1Pz}awG{YFE>%m4g!|}M0
+zqw)AKBLx78s2Xf9Y<*S<hAk;f2ViI+;-l}to4(878UvP&9e6*hF6sczMpITUTf8|H
+zyE!#ILqBA+aW>SM)ai<vi#HoCp3~RVEM;lzA}2t-NpCR^2CpIbNf@_5D;{4}-#}@s
+z;v4u*c;fy+wtSOi-(<x%S)8thu6z@%gs$xK2UmY3Rwz~u#VVngCG^$=?7C1xXQ3XG
+zMT+=s4@oDoEBY{5sxRssv(1OT3x&SM4D@e~rj~{i`P}Mo{nzTOm0n^AUk0#Ux7Z)o
+z>0@UFlqG+%w11=t@XKrJb^0+(u)Q#T1gP;C<0=YSFW*%(W1$&y$lq3|qSvjL?<xuu
+uo$FYsxd-w28afN5=+^u*Hhy$6IgMQyigFf8$t~>}8$WtsGSK8XYxx)L6pe}i
+
+delta 1216
+zcmaJ=T}V_x6rQ<%d+)k;uRp74tUr~hH%UoT6hbI+U6%AEp}G$(tF!*z{o&p<%M1;S
+zHn2kGA%X&-utXuLmmYfXwYS|`N)`$O34GhY7lWXg>;ER5d*_=oXU_R%=FFTQr5nZ0
+zSF&seMAkwd`qzXRXYs^UGI|0KKu`xEs6j||MrSm}>RF8?J*#seUgJZ8CP2V|4uH5R
+zfcPLBvQaiFb1VQ0q-}{NBIYtsg>^bqVOj`9P*69!R3<Hl0>eRnG+>&e5d+P9$%VZ$
+zd4>F22*7>(FsB5cfX^qmZ61JZi_9FES|DvpGzSBM?9l%_WXr?36M;m;B6d;A+M<%>
+zW#99f*msiLtmSenH%As(UY3_^c{#JZ^5dWnB4tX{3Q+D8&|D~wU?IvUSQH00p>~91
+ztssrRGj-S38^{61#6jdokzTW2Wz*6~RF4FZKNd-I;SpU=^F4YXJUnKL4n$%RvwmG9
+z5h`m)q%-I}8@UA5CkgCWl^rV%vqf+f-(x$R<6wv(W=m#Se3y555j>c5vm{1Iw`G68
+zLBDa}-=$(eEC(mpk~(2G4i18G<|TY&y)trArfbX@?HNXW4SsVV(9qOesoJoOt2ip|
+zypOcqj0KFCIXV~{FzB7*DsD<BB#JqVm$*t*DVV<VRjK}@R3~a$l1ghzY0UsAwSIG}
+zuPYZ%C*3V6cT4=@bmzOz+%pJWI4ZP38-61+yIhooa#j#A%7|hV;!R;wnTO<|8ay==
+z5x}DOApZ<e$U~O;NZ$S7Kq#o<7vcq2jDL!QxL2w^##@(QP*N+(D4`nN=@wHH{wSSP
+zXuTK|Xj058_>XiOKenH$w!e2RcPC_DQud`}-=t^7;f{M!4)^S>rP%V>gu|P3cvB89
+zUbVX$mGbzFlv4h>ajARRl~6oM#gkGzlirNL^Hmve2sm+VPJ1a`R+Z8c8VZE_BXy|9
+zp!I50QK-RB<=Sg}CoNNJfAhd7rxP?Szr}N;en<3Ro8covT8ic<feZ^FTmkOH!G8tF
+jlh(JV;PXybTLQFaxZ|)a1OA1$XZq4FYTr0y(%Q*i+8qpG
+
+diff --git a/myprojectdpoll/__pycache__/urls.cpython-311.pyc b/myprojectdpoll/__pycache__/urls.cpython-311.pyc
+index cd156abaa15aa0651c526b993b9b383de118ecd4..c1cb78432db759ad774b747f28408fea5594eaa0 100644
+GIT binary patch
+literal 1734
+zcmc&z&u`O66dorNC(aM2X<AZBw_Pn-L8>K@sue9&RS8H~TDnbO>BWi^h0HWf@z~MW
+z0pSDcfdj|f=#dj-wfq5l-+#cCe29EnX;0iDaqEd0yDl5Z9mjt8=6i3xH}B2N`%ESY
+z*i&Bnr;~>O{Kp63BcFp$wgA8zfB+IyKm<h)IF6_h5>=uED$pNC)ff>Kkzt5psz~BW
+zoFtS4kras}l_W_iDUw#wB%@@AtjHv*Wc_)fIzw_w&c|_emgJSZ03rZKQ39ut^db2!
+z3cz3N3m)H-!WopF>d9d7I9xYC^3<3tj-#2Wo*bK<2{XNmu)OU1U*1`qMfs^S=Wqhe
+zPxV~FDO8y1S-=vyJk_&^ljzFVo=#Gk!@1-6a7A<p&#`Xg8Fwk<7%qhP!_s607OPB|
+zLqGfh_*Y#1$ODUl7i%HX)rt`h_FCqV7w>9qwU03OJnQ1;#z(gMpeT7V#htEUV%mJB
+zGwY=dY&Lr>!+5S!<jHrBT3QF!!?C!hcl5sL$*5%<J<(efHMyDxk92~)8CCCewLmD~
+zGhftsn0!yC9c+ejY%vLz&g^O(gJIDyTV}WI0m^ra5m0LpY>B>V*^BxAmJ~{sy+jDD
+ze5=<jhoc*QC1sjmDprzv0tG96$kOX(*%Jd`@nXYTnOq31<VAU9PrATXq3w4g3@dM$
+z`ctfJmpysXVZ~WO)+UxH0IZe_(%XH4HM2=|-P|uOupS<>-s+{cu9>v^g!0SarOwGd
+zRSn9nE}$_^%j89m>c_ZkqMoj*ROB9BAC<V_x1FZANpr*7NBMoBS#D;Sxe#XA4rz`v
+zg)jLJOFUmG=s%tH;~B$F4m%Q>;l(P|I|sjc((l#E&h6&GqdhMfz(=*(<3GVCHUXS%
+z+}&&(7?>K3+js8oG%DD5YU;g4rC!_HYxv7<OjgnGllESmCANr;`YPV0MJB`#rg6sX
+zI4TIj2>fVIz9aCnJ?;HAavT9dEiz`3-_L%#su5VVC*OZz;-vC=_Vwda(S|DyTyf#b
+z$mbU9{MF$#8?HHU&4p_Ld1Y|m&R-u|Hr#aJrVBTH+Lo42U)sM`Y*=+*)rHj{cxljg
+z3pX5Ca$zZ8E)VvH3tvetpDqn|ZMg2hbr-IOGhYrL*l@#v8!p^9&+*gSef!pq4R;;5
+z>%!eo@!ngexaz=F7p{)yQ`yK#YP<+w`qlOr2*N{Q1ha#igPW(<-Nj%2zVB|;?0ntH
+X*Ii~|{p11v@!ftX1mW}=I|H8qrqbPJ
+
+delta 410
+zcmX@cyN*?3IWI340}#kp?@o7RWMFs<;=lkKl<|2E!$b|UEJg+<hE(Phwp6w(4w#Y@
+z_B9;Km>C#W12F`E)o=pUaKc1VxUj0>PGw)l1k?${5RlFs#g)Pn%%I6T`46L>KjSUF
+zqSW-v;*!*&__BN;S;dx<pPrege~T4NYck$q$xF;lt>T0!)4#<5V^;Ad7G&zfc=~>t
+z+>@6wyJ_6w0&9&g%S<i5#S4>$aJfs1atablfEMKyPtIfU5f%kH3m7B}#dCqg2WCb_
+z#s`znvREhHU{Jh(iaxM0uyQuIbVy7vy&|l<Lj3}Z(M1-cD=bDgSU7;f(i2jzh-q%%
+my1-(6k;VE7i#0@8eumyf7R@UxnjhF%_?a5GL9j>|Xcqu8-E2Al
+
+diff --git a/myprojectdpoll/__pycache__/views.cpython-311.pyc b/myprojectdpoll/__pycache__/views.cpython-311.pyc
+index 8f2433d9629dfeaef8769cf65f84cd0ad4acf18e..59f7f523a3ec0b2230f74fb8903e75a613df5aaf 100644
+GIT binary patch
+literal 14700
+zcmb_@TW}jkw%82bBtQZLKma62aVS0^zVxKt4@#sY$`VCOrnG`YBM@dtf&vJ-2b5$Q
+zw3S4uz>adQIC8{$ueUDmtzEA+cD9tNq{@{q`FgkFn`aMdDnw0%RjMSax~lwe%X_O-
+z`bo~2!JFiIqil0<rl<S#>C>-s`kZe5qNb*rfpB#6yXo2vhWVfPkq^dP<cGgy8Rjv=
+zGdvq(g4&x6vg)@ks8iqipk93&f(Cf&V#c^BXkrmpA2Y`-L5mtU#H!-e!Roj*XjQ+B
+zF<ZPQSfj>GvD&yjXjkLrm?K^ntb@3PuZlV2uAnRK4!YI6>R5f;6ZEKYYs?$>1$}DV
+z7Hfz%1{>r4pkMv2i8aNWgUxEZHnuI^5^Pc9_81p$4YsOrM{Ik%E!d{U>tgNkj$nrx
+zcg8y7UBNDhTX<KjJ01uI)O2@jN4zK46YmZ7#`}VOkXC=63HI|IfCGYs_ugl|giiY^
+z--AqWr;a(p@V@&D-yqb??#gF;sRu0hX(6~9`l%86X-{wu%LsdT{{}jHb&OEQH%+r&
+z!dQF-KP~Xh8!-3r+kl%vz6IcZo&$J*Zv}V|=x*PDeTZ*^yu*Auz#}|+nF(~fMABmc
+zR<WHE6LXgYaXv983h-@>h-4}x+!f;U$$(C&jm!v<TcP=|DBejBUa5(PZwZA@#1{n;
+z4acI30ukZUQbNiSo{xrZM}<2tu_-{zcqNe(h+-ZmiK%D|YpW84IX)B*M`Q5e<%Oy6
+zLM$0dCT<CHp=n`GAmL<!KuHq;JSb`*0v{zpB#BkU1yKx73s`Oa0*Q&?DIs(-EDD2r
+zL&97n!K=-gN{|R7zn@g`92y;{AtWYAbZ#2yh(a<6QKVzPEF{NsZ9SbJaY$-VSp+iE
+zLbA|sjb*)J3oj&Rgt=ri5>5(=F_xH)&M78%B^HtqZS*u~f)`GOAF=>onXxPI-WZaF
+z>B2Cxx_o{TOXtF@As^#)U+cdFoUaOa<<n;A|EHF`SYUX=kJQ4Zm=wDROu@7=jw#Gb
+zWC!|<z4a2=4ww|fYyx|Qgy;A~Tro#x648htDkg0N6nj{VM5CdF`FVjvVE7ahADxaS
+zMHqH-42A|KmSUb;h~I>Wh{QSW^}$nzZcM<;6K@QiJUe=0SP*X|6Z1EQ$1k2ge}kV-
+z#9}w%@6VIOEKC*c6X&7WKmWes%*`tyv@jQaZ$St}c@hAsjqnpM0l3FxYaO3Xe=_~~
+z)T6ndUy(ZwfAb#o3`w3L8DQ;6x%T9}Gi4}0n|vCko&%ESfDEwqpj>+pFs#mpS0!r`
+zH8lMIRGCO&J;O&~I-G`&$4s&$Z}Ta@LpT4v!G_M)jV%tp+kO0K|BmZJeZk3q77h0;
+z=At+FT+)g5){Y&=J0}B(2l+Sne98w0dY9S*dc|-vk%%ceA}Cc;3$a){oQ%xiO38}>
+z5&7jvH$bKCHmrUgrhj2^ke!$dKXDs?d(4{E{<-dvjW+XiYEE(_WJf}>&db($YM3WG
+z0Hv&JaOSBi<yTP2V<yGSLV^}}_Le%=$v2Q%=(3f<{Lkazo7YvW2I#;aEu*g}qpM;z
+zUwfO^nPR^-R8Y_-twpX<6+ET%p~A{e=~v7}%wp_Ih!#~1%OvZHdAyM~MOohbwWWM&
+zTxQzJ`L4>BX=ey1)iN4Yd^OOpR?>**uEC1F!`#(hWA3mOC2UZlrm_S~!P+s!Fn;m!
+zJ4#h?Z4E%(zhucCcq!(b$X;y73t0|?FDEWUKp==X)!u*ky^4?0A)H(g6{A2%g1oL9
+zom1x-H=!<CZglwNLzn@tJ^6GZz*-iQTwF-bB>0z~LuQ~_F=?M<H`cBP2~Kc06m#Mx
+zN(PZ&_Y>q$F^J*Y0>O!=*oG5=IF?9`+>MIKUm6s1j<(tc4cmAdHJOOAn1i6L1RJ!a
+zxCn4%x4}<DReO(lZmzxm;j$-VZlUIutlR(S{HnV><8EKMF1dHf?p^7stgG?SkyTe)
+z#?`iRPI3*%u7R{=-C(LZ&#t)}9$i><cVyfhPphcALvkOI-G|a6Yt1{J9FUs#%FTPz
+zBM-*1wz^NxeRA&O^AFCa&#$>!RvKvU8OoidZ@)ub6OwB}c1=**#H%&CTei2ZGc1rU
+zg;>N(cO0eMv1cN6y(PKcl3j06TkcucV}Vz%Uj3bkvH6z0bo(LdJN)bvwVsu%XJzYI
+zYB(#pptaw!Lyae!n7?k?eu~w9$FKk+kX#7ZZ5Vzy0N@|PA{Q9kX$E!bK8l5Xl&*Y2
+z2lZ)Yiskk9EkQ$?xyuHPFxd=>UENPyE^I)`D#=TQA5gFts}S@-!!&5dzXBq>4#?<V
+zyDP}_Ul5XEm^`ZN3(bY&pxFi7qbSDtnZ%r+==sD=MK20>6?2piCEuS1ISCO>M=2(V
+z@`;Fw47(ScU1OjHEg_XuD5O+}Lh%H@5ECG73x(cW2*<FJP)M7cM#vOmifJk;#CY+S
+zj4C3v8D>Dv$T^_64}LlEdJkq7{$(BYX=Ao-fvQj1gnwGuARtHb{Q+?X2LPw~56b{P
+zXUi2(xx`7aJbMJNO4Smi=^7wS3*{0I^Hlu84uYxJF0WwC8$zmL(~BcBR$OrbgQ}#}
+z1*;gv1=uSnrU(&0@1VXCh1ir*o7Y6p|KVg<sS1T6G1$z7LLyelare|-B$M#5=&2lZ
+zjo3lR6Hfqm1$wLVfYf<N?mU#PefWW7X<O^q{q)$g9rB(FQpcFwF$T$tl4U!rrjPGD
+zxbx|UpM1DHC)xXCdmpv*sXZSsk#~R=nLuy_0S<-AfKrp=E+WKYp-_M&e-E-$#d<<x
+z^DLqw*ozr60D!0b-?~m`ybX(YbNE{|{dc9g7QL~5o%zFnHfykIQ2I92Ab`D85+r7s
+zrmh79br!8#w$juO4df?PsKX1|dI|M#VJ<G|QtamQf!FaByW16<wHreDY+cfCNzd>`
+z^bA|lGrkc$<CgSHZ$!_uB|Y;S(KByJ&+<m}EL+m6dLw#OThgn3BYM>--4^rDS}xa?
+ztXpE*DllzZ@>s*ymMgZE5-C}n+U0Yaw`;rJrJ9tU)TRu?mNJs+R4uWj%*2$k5JRep
+z=u*|9D_K*d!8`am*rhqYc9qw7nMvA<SSe#U@4Wk#DxF1l%D4indSfW(Z9|>)o7b7L
+zY{2wvj+t~8>s(RYR>f~EmNN0)@;0rM?6Hg3<(w|nrfO$x`CQ(2OO+<1vd<be=PFgj
+zH{ND9VEebkZpv9Ihst`px}vw6b6D<F^&9o}wk_*#$x-f3`txlDj{-_;HSk=jy1WlJ
+zj8E$pv}-nCZr=jaN+wg**}`o5L+1L5BhO*!n{O-cw+$S$Z^glE!CK-wwixlwEy~(}
+zd)ps{`>r41zI!VUO1KYf!TpZS%O=~4{WptSay6{D^Rd!*N}n>MjH%j`Ib}&zrK(fb
+zlr7m)#3)}!shY2QzJzu3RbeeH*;DovPZ7TuD=!IlXQ_PZP1$F?d0f8l3mxCTQC5K+
+zi_U~x0PD4H$x%kd!4D+Sw9JK+qr9*GocXB^dT3`QWwdU2X36oP<8tnOhb`E;rCd7r
+zT~K~^WqH`0?itgpN(-8;W3YcGO~3>>kKh6T#fnami&H0~BsoJaVv0G;^8^fC#Tn(%
+zX*h*$!)Rje9kd|a<!NK8!%Hzn`Qb!_Tvm%m&__F$RE$&M82HHyNwOdi+_5fthhi~K
+zGZ?rq5jeD1!B5JQ!;nk%19*wDbaC4_8Zew@sc`WHFqm%&+^(IR=5kwf4QU*5QL#W{
+z(b93PuOr^q!AJiaxF{A|uO$`=MZ-xhCWL{^t^?frLYRnLBE|=FudPF2ekM$~Q(?lt
+zwy1k;Zj@i#KU&ss4sE9bt*(+XU0i~2UHNidWDc8vQ*N=P1WPMA1C~3tYj>^<B!O7Y
+zcU33Y2YZ&T@9aA``N96B_QjzbxnZpsI2cHhyAw^$aC^9d_Ys<-x*WMFa3Ut|2t0T5
+zeQtlgf0_$z&y59_OmN@<=D-^e7XyYxL;pNK_1e%sJ3sx}2vC@YkNLUj#l54$9E{{b
+z90st^;^-VVK76{DJ2!p?!3aQT_W0NtsGWe<Ey^(C(BYdEjln#En!|J4z6&P<dh#B$
+znh*pcwm$#^4Xouy7%KWbb#Tn0zZ}0veK%0Ik++a=VQP~x{KP3urVxxHcpCxwPu0n)
+zS#IdMTWr?4oe0z5P7z>Imic=EI)b*WV$mEsqx{Ri!9uQ~IZpNbaEVA{fk3H4T=aKf
+zMUW#{#Zdr(Msf_}s&B`5di4CrWpW%6z&r%k{yci)?*Iwh&nWtsFbBrEs7`amf-5r_
+z1-sq?sPk&ffN6>W=P>D0si<C0#h}{%7C3$oajJl+iANo{;UFgvpfRbLrb8G*S)^2r
+z+>Ho8HZccYf+Pvlkzq{6D#EaM;pjuG=uyQCE(JW2_>o@44%K>p1SztDhzbr}P-Q{$
+z7S!guJaikqRpetp#SRi*!``RVBPE$z)^%fS)m2vYL8XV$KXoBJ^4!<-7nVP>tTaBk
+zB>8sAzMZSS!HjQE@*R+U2hyWix9{=U&(1DiUAZZ_1F}1?>K@3r2Xg+bksr(UG(MjB
+zY-V}s$xX?#OZMzq_3Y1h_Di0Fvgcs>OxEdn-2GYi^1hYrlCwj0cC0#kGR_{!*(W>u
+z(x<Yy((ganE_wQ7Pv5F%PsX!H^6Zm6`=GRzO<VRny`;J2S3Sovo@0{dgzPy1`C7|p
+z>;7+?lJAJ@JF@CKnem;Je8aMD7@Ah!`1smq*Ou={^<8p(SNe3;-SBwyv(e>g$=xZt
+zJJTaY2D&8AZrQVY)pH<&X8?y}&!KOoGM?e|nROFWzYQF0HCNb`4(<J9M0-DtXzy=w
+z?`PB6H@$Q%7kM|AvgU1Dxk~%b(00|2=beze6S8-LIwrsk=WspT_wnL`#pO#GdkeL<
+ztStOu>93al@}r-91RuGQW3>Gu{mFIey&-vT$le>&aRUr?w;$_yn_cs4UpYhjPSUnh
+z-=CtMamh0-d&a4K{Dre|)!CMDwym6b5|o?=WaoiZ=h2MwsN_5@JCDN<*qsmVF1LU3
+zQTn4?O>fioOZ57?)Ekn#A=w+Ej?i<vhi*Ga?fB%drfK^OeJ@G93zBz1_AXGz0$?ro
+zW$azl-t})?Pp|#!ZU1K5v)!3pBXrlu_kq=O*E8p?OXnu#bCZyeqjHh9kJD>6sCQEG
+zPRia%>X<|-J2LimYH$Bnm%jc99enHiYf|4;x$i2Z<chsV+X?;PL+brV@_r<HKcbG0
+zp1T^cD{inklnb<dj9v{=?{&$0UG`q5j_WXx4$nGcsNvbHxB1ZrtKRO6w_Eb=ki9!r
+zy?Zj=J#;UO%N5ys1xVH1Vb}a!PrP*Z4DF6mvOxW}CI4;Nf1A2*XI%}C4zILiTsx_2
+zXAW(Gc3+{Po75kX{1Mq7q3+0YyBq6!7wT(zw7BZ+%6PjZZ$S12R=vA3-raQ1dC7Z0
+z_FlmHV)^<eY4^KydY1ZcN&Z{1{}y%M%DQ}y4z1WTt^w*A$klg|cB_5opOpNQvVW4g
+zCtqkD=I)HUJKNZn_4x5|d-3tL-~)-?W=LFX?3Eh(<;H$UTyJ3N1HWZz>T7?8AU(3a
+zjj3@KUC=LFEwuM7dhK2L+6?8Q_&{g4ZcDD)vg<ar-G24L?t=z^;3<VUH}u)x=${RJ
+zYx=c`?l_ANH%c!}P}dd7bwzevp|;8g9MiARMSb<hT+}E;|KyBmyodSs^#=idZ+9bX
+zAF77e-wb#F{s+@>fdA3dhj1@u|EH=U244TUx*1`&`te@^`0-!OLv8S)J=Je-*VBF5
+z-)`1RUKZj~vk{=GpUV7Zg%hq7&}Zc*T$r*k@D;vM)rVF<+oDXxSrdBNz)PS5+o{Co
+z!0UMf>~D=<o64=h%gmN1Uz>6WCtv3Boi}*m^qX6Jm8W1}RhM!EmqCD|>Wv(gVd;76
+z=6qM2e3|mylsow<tx3=0Io5`@m!EtEYD&D&+Ge}0a0bP}kv5k<6y0LuP0)R-?r|3D
+z&g1=nlI>3`8HCJ5NB$5iPl_CZ<bav{BP@z4o1ibIWY>YsASV%=0#I=dWmT^s<dptD
+zf&52^^M3$<(sy_t*;XA~#=))lB}bp^=({(XwR;|<R_!gILsqIKdyj1Ixp(%t6(kUA
+zyuvP@)!u7%FP{0Fp*~d+*(W6XglwOnmWg$P**MIuIqDzPtU6jVj@Bom)X^$A24%+}
+z97$LmtJao`wPnR3Sp%{)0B-22GwhnnzkH2$AEr%5o?WJ{QOPwbyGE&P^aW&GrJV<8
+z)4^wL)OA{Not9mvsqOTuHLF9mHX}E~C@=~z$JsvW8~jG3_EVDmlx#mmEx8AT0-%C)
+z5b@CB+nOQs$!_Ma>zxR@x1Xxfe`jL>maS3THRA6F++voWkHA4ZtbyY79I$H<GZ!k?
+zDp-oTvDfSX>~rxTilBo7jze)nSbB<Xf~f&_M#!g-{&UPjR^bT3P@UfY_b=YRc<<tx
+z)%Eby$44I=r3Rnspf5Yo!3m-A`|rTF{+Nj}OL%q-iTP0Uz;AhWT_I&Q_luU>^tj5!
+z_GDGQ7Vt44Cu&G-IL52+092f|UuIJJ*}@t4l7Tm*46_9vWRwL7#>^IK;*B{E*RLQI
+zZCf>L?g`{g<s-Ia`~%8V$}<!ANKBe{lyq;|;);{_iWY<S`p+4@`llOOp2XqKg-V}n
+z$`C4eBvOWzf)6i`kMHtPfm#dw1S4Y4W5S47%jJ9pe-)nW%gkIS$Wty~o?$?WHY}Nw
+zZN-#SML)5O>RB;=Xr8lxhXvjxo|TT0atvPsngHf(@roR*m0G-$R$qDBO1%)a*pL^K
+zU?U56=h43b<~Ljw>wj$-z#@s{fM$29CZTOkxKlWeSDbKbEHO6~CGkSqV#~<{82@>p
+zD{|sYVj%_wzrca}BpmBstQ&}cg*`3w<#7hcKZPbN_KxT7h;dqexk=m4jiXOQ;8Z!>
+zzi1v%BLj<e4I7E|&m`lqfQz6@Lp3Dvyf+3`8rp{h3_-N(RCS|D48^bjx1F@c6^vd@
+zGoXf351Gjj#1wPxG6ngE_+^}jOKwSmGaz8mtWcxcWpE8EF_#qXCKW3j?V(8;f;$mP
+zm1-$sl>Bon@2KoEl7?gvS7qMd%-Nc!)Q-yc3;7Gc_$8tekd^9<s(WYF4L)Ptny2|u
+zV%5`|@$^31M?JlgXH@o#u6izJJQpR;+p_2Fv^8so9l5Tmd(Gy4Ft)s(wjY;lCuG|R
+zYCC~i11?8&$*wMH>w4~Pk=^Zhbz<8}mCWs-&b?{#bF1^gvE?fnYa6w;W&PW~II`;R
+z$@qJoj7k2(vj1@Ue72?Yi_~h%K&EAY?i`j{M&y<eYHNCK_ftr;4^aESn#1>~cKHtN
+z9+e#DWXCz`IJf3)q1=(DBLK8V@*b7FN2%lJi`M=pDXH~{+<GKED%-YYZS|jyeKIE5
+znq*rO5Po5ELj;xDJCbcew&5iVYzXMQPTAE-ZJn@_wza?dyC%j~kBY6X2-Yk$>F~#v
+z2bOfnUv8^wtb+(%#&ACDqW<0|(~@;iwhmImpx6n0e}Bk3+{t{~G;{=B-!%+b;q~jz
+z>X9n_uXox<4Eo;~j1VtVdj=?`s*$X!M%1HQNYX<7`qe|0bb$aZYy>w~C>t+eZE=;V
+zpfK|F;2SoS6+&_aC;Em^F8Dwd6@(oKzJl@q!DrYY_*_L|e8n*s9FmpPR=je#c}q9)
+zx};0i7pW%;Zf@WS7rYwEIj>Mq`Xp`^a-pRDO@)6-2b<-xEy)cSy(I&vIdJWV3OxeK
+z19u-ALOCa(5=zCpZq}JEkg7P42h0NPirzN=zxB4NW;*lr<kXBQ87QWtDq5IRGo}ws
+zs+xg!iJB=nynvCfP|2WVsx;TVCQfmCzPNoX!J&i&zv}{Q=~bt2at55>g{^)+`3w-@
+zn#N<quS54FUI{`+Ir`-L7p<BG(geGw=$h1|bkSk>Ig}^=0)Z;x@dl16;>mr8ft+86
+z@`@4RUR60LHF)nhK|<R76!OmyA0<7(S*7`8QPh(^MW70LvnuGd*8LPy{|vzw06^-i
+zS7vxkjN@i2C&qJ9{Iq(_xgf=V4hY}FPrR&3@pYZsSO@o7bK+G3@#<^&!nW$`&iJ~Y
+z_$A*y*|#qZ8+hNNqpPm2jH~NufV#RQ*AdwTH``8TTqh;hu<RNJ>0Z+dB31?~1TLJ7
+zNsf!M<05rj1Q`n!h_^@f_E1O93t#gWHLJcr#us=xN__#zcTDyjOOLL(y+1X4QT?a3
+zFKm*#Lw0whM_#n;_}TH*wiB7Q6VIZw?S#}eF1L+KHZJ|vvNyYPU-~WC)|a(;S8Yuh
+zTa#ql24b4pw!N@*tVDm7c)B3jj>@*9)OHkfPEJ-Ilx&A&+aYQ@RIYT^TUA-z{syx8
+zg|+Ts*YZ)#45EgB*aDsV4~7m84>I2#J2?oiUk_G~H0XcB*hk#@-?)ts-&{U#hk})6
+z378(R?!SVc7F5$?v0B@O;C=(_4xAw5PXLq}9}X2oGZ@ti`{W5={13#!#g8|5k?$jt
+zwOh7!Q$x3Ae-sn|;1m?cAI?}!-aV}@8S)FDvVpS#j>gu%1f2f`zZ_dycOI9lJ+ifj
+z8hZXHY}N8%apq<M&aHkAUqvL1v9E!tzeUDSspR^L`g<g6uWaq5hTcC4XH_$axbS<J
+zGGIRW6>#vsk(JV+J1kkdWNQ~Sbg7&Kj;d!Iq!sW8N_)7Y5B~;2{t}~Beirt;38*MJ
+zubrMW<x;de^gL{&)&I*7`|)ZR!J$|DITYMglIYET{J)6)8R$v4B}-7lYd81cNJ318
+zrU)FD!oQQ;A}E0rZ+T)re5(JAqB=d4hKk%`^#qL^xZ;b~B}L6Sg4$Ja6nG&*KMHAr
+z_LI_BNG@Sf-3*Ha^=hFUm;odiS%B-o>S{rqsnnJiR%N$RmrGnoMq{|6hyKD&SL(~s
+z)&E6-|1TjpHxy4UFA4u(6N4kC{#YUm|Jg#^n3?Z-+;tP&K`0I7^=kbJnkFt1JaSje
+zGeQjRLW-(3P+Xf}6CdCav@bOW1S(bahCVrs1nd{E`-*pH)f<Q8CL(=|0R2a*S3=#=
+z6VwQ*bRf7E3C??U#*u3n+kv1Pz-!A9?TYI$@*RAlq!9l*2qtjFuxys8x~KkSnVNg*
+zUrEGzPyNd>g-APP%APE<mzF<SW`u6`WSLG{{$!b6TK;62ep>!yneBA5XESQYC{y-i
+znLfJNlV#dy`IBY#(DG+v+0Ae`%9K4>W*;qoHfzyg%53?poAfL=)e6AIvhSgLtq4t^
+zuGe)n>?kB7{H-1m?)!5|oP~v(r5nM+TX3lNTg>=fG1tkkgBAQfXMy-7R;8}KkbLd^
+zrhMXzj?q=$^Q8yV-4g4PS=YL*mPH33Ld10!(>NX50Go?Eur#y#*O>x1=3#fNGX=1h
+jWx*Gj2PzvZ+lwi^1r{*D#Ik*ungj6Jjh~f3o&En8dsZP~
+
+delta 4275
+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
+
+diff --git a/myprojectdpoll/forms.py b/myprojectdpoll/forms.py
+new file mode 100644
+index 0000000..20f556d
+--- /dev/null
++++ b/myprojectdpoll/forms.py
+@@ -0,0 +1,9 @@
++from django import forms
++from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
++
++class CustomPasswordResetForm(PasswordResetForm):
++    email = forms.EmailField(label="Email", max_length=254, widget=forms.EmailInput(attrs={"class": "form-control"}))
++
++class CustomSetPasswordForm(SetPasswordForm):
++    new_password1 = forms.CharField(label="New Password", widget=forms.PasswordInput(attrs={"class": "form-control"}))
++    new_password2 = forms.CharField(label="Confirm New Password", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+diff --git a/myprojectdpoll/helpers.py b/myprojectdpoll/helpers.py
+new file mode 100644
+index 0000000..03d5f9b
+--- /dev/null
++++ b/myprojectdpoll/helpers.py
+@@ -0,0 +1,13 @@
++
++from django.core.mail import send_mail
++
++from django.conf import settings 
++
++
++def send_forget_password_mail(email , token ):
++    subject = 'Your forget password link'
++    message = f'Hi , click on the link to reset your password http://127.0.0.1:8000/change-password/{token}/'
++    email_from = settings.EMAIL_HOST_USER
++    recipient_list = [email]
++    send_mail(subject, message, email_from, recipient_list)
++    return True
+\ No newline at end of file
+diff --git a/myprojectdpoll/migrations/0004_alter_voter_password.py b/myprojectdpoll/migrations/0004_alter_voter_password.py
+new file mode 100644
+index 0000000..fe2ae52
+--- /dev/null
++++ b/myprojectdpoll/migrations/0004_alter_voter_password.py
+@@ -0,0 +1,18 @@
++# Generated by Django 4.1.13 on 2025-02-25 14:02
++
++from django.db import migrations, models
++
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        ('myprojectdpoll', '0003_voter_password_voter_unique_id_alter_voter_email'),
++    ]
++
++    operations = [
++        migrations.AlterField(
++            model_name='voter',
++            name='password',
++            field=models.CharField(max_length=128),
++        ),
++    ]
+diff --git a/myprojectdpoll/migrations/0005_remove_voter_password_voter_consent.py b/myprojectdpoll/migrations/0005_remove_voter_password_voter_consent.py
+new file mode 100644
+index 0000000..0b54565
+--- /dev/null
++++ b/myprojectdpoll/migrations/0005_remove_voter_password_voter_consent.py
+@@ -0,0 +1,22 @@
++# Generated by Django 4.1.13 on 2025-02-25 18:49
++
++from django.db import migrations, models
++
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        ('myprojectdpoll', '0004_alter_voter_password'),
++    ]
++
++    operations = [
++        migrations.RemoveField(
++            model_name='voter',
++            name='password',
++        ),
++        migrations.AddField(
++            model_name='voter',
++            name='consent',
++            field=models.BooleanField(default=False),
++        ),
++    ]
+diff --git a/myprojectdpoll/migrations/0006_profile.py b/myprojectdpoll/migrations/0006_profile.py
+new file mode 100644
+index 0000000..0c4e58e
+--- /dev/null
++++ b/myprojectdpoll/migrations/0006_profile.py
+@@ -0,0 +1,24 @@
++# Generated by Django 4.1.13 on 2025-02-27 15:19
++
++from django.conf import settings
++from django.db import migrations, models
++import django.db.models.deletion
++
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
++        ('myprojectdpoll', '0005_remove_voter_password_voter_consent'),
++    ]
++
++    operations = [
++        migrations.CreateModel(
++            name='Profile',
++            fields=[
++                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
++                ('forget_password_token', models.CharField(blank=True, max_length=100, null=True)),
++                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
++            ],
++        ),
++    ]
+diff --git a/myprojectdpoll/migrations/0007_alter_voter_id_doc_alter_voter_photo.py b/myprojectdpoll/migrations/0007_alter_voter_id_doc_alter_voter_photo.py
+new file mode 100644
+index 0000000..a7e687b
+--- /dev/null
++++ b/myprojectdpoll/migrations/0007_alter_voter_id_doc_alter_voter_photo.py
+@@ -0,0 +1,23 @@
++# Generated by Django 4.1.13 on 2025-03-01 13:19
++
++from django.db import migrations, models
++
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        ('myprojectdpoll', '0006_profile'),
++    ]
++
++    operations = [
++        migrations.AlterField(
++            model_name='voter',
++            name='id_doc',
++            field=models.FileField(blank=True, null=True, upload_to='images/'),
++        ),
++        migrations.AlterField(
++            model_name='voter',
++            name='photo',
++            field=models.ImageField(blank=True, null=True, upload_to='images/'),
++        ),
++    ]
+diff --git a/myprojectdpoll/migrations/0008_alter_voter_id_doc.py b/myprojectdpoll/migrations/0008_alter_voter_id_doc.py
+new file mode 100644
+index 0000000..7908afc
+--- /dev/null
++++ b/myprojectdpoll/migrations/0008_alter_voter_id_doc.py
+@@ -0,0 +1,18 @@
++# Generated by Django 4.1.13 on 2025-03-01 14:24
++
++from django.db import migrations, models
++
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        ('myprojectdpoll', '0007_alter_voter_id_doc_alter_voter_photo'),
++    ]
++
++    operations = [
++        migrations.AlterField(
++            model_name='voter',
++            name='id_doc',
++            field=models.FileField(blank=True, null=True, upload_to='documents/'),
++        ),
++    ]
+diff --git a/myprojectdpoll/migrations/0009_voter_address.py b/myprojectdpoll/migrations/0009_voter_address.py
+new file mode 100644
+index 0000000..47e1992
+--- /dev/null
++++ b/myprojectdpoll/migrations/0009_voter_address.py
+@@ -0,0 +1,18 @@
++# Generated by Django 4.1.13 on 2025-03-01 16:43
++
++from django.db import migrations, models
++
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        ('myprojectdpoll', '0008_alter_voter_id_doc'),
++    ]
++
++    operations = [
++        migrations.AddField(
++            model_name='voter',
++            name='address',
++            field=models.TextField(blank=True, max_length=255),
++        ),
++    ]
+diff --git a/myprojectdpoll/migrations/__pycache__/0004_alter_voter_password.cpython-311.pyc b/myprojectdpoll/migrations/__pycache__/0004_alter_voter_password.cpython-311.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..839a1787b72e27aac036b61ccd79868748d1ab51
+GIT binary patch
+literal 863
+zcmZuv&ui2`6n>Lrvq@-07okeAhazGwWm)wiMW`+QVy%KzBm{=IGj6lySCd_}w>^09
+zBJ|e(pepU3pnrl;VGqk(J@uBdJ@w?9?548RndIet^WK~J-Z%L=J8J=sFTZ}ae-MB_
+z5|pDdaYoDN>;eNu0tksiLd8)CDDV)N@(GyANk=V<_R!luLypR{7hqS8WY|`O75eSe
+z>-uq&2|bJ%53*KSDZkYT7&++d0tbgMa1=(`#8DOCTBjt1M>Dyicgh-I+CgOxo7l&9
+zJP!0}I=G9$sz}HX=F^f1(z+0CCu!W_tu9OAAP{%z_4+OPKJN0ACSI0(h*LI!y~y9{
+zaq2Vb1u{HN;-TjUqEY~1lqE-fq+t{6+WSZY9<{rhwu(shO(QSlLMv?Lt<M9tZkxiO
+z#X6<Jq7?Ib0Y`s^(yg8s$XtmSPk6+5)be?jN~wjlBDp+}yQG?2FjqIdF&0*w@QLK#
+zVT3_AeZ6|ueVOqzb64&^dhD+8>|Hlb+_mS=noYM*z?~Mv{da9HN^^Uv_p;liWINSy
+z`@%>k+d$Jlo4F3=2FX?Bvfgjz7MKg4t$}fEIJYpoG(W5@?%WvE7QeL)YmMKv#-P^7
+ztD0#Y1DX?Qa#gSC{U>s!SIT47ZB3Z0<3;UwiM=VrC<GW2nUiTn?p5?ojpebT_tJTU
+o@+Zk&p~+Q32$CcAA>2Iw<oXQJb2x8ytii?W$1-s8pJ;LJU%cVwCjbBd
+
+literal 0
+HcmV?d00001
+
+diff --git a/myprojectdpoll/migrations/__pycache__/0005_remove_voter_password_voter_consent.cpython-311.pyc b/myprojectdpoll/migrations/__pycache__/0005_remove_voter_password_voter_consent.cpython-311.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..00df3009ed25e638ccfbf8c3ee85a5be0e9e3755
+GIT binary patch
+literal 942
+zcmZuvOK;Oa5Z<*N$97T_A|&WT<w6m@R5=6*p$e&`Di4K%Kya`uSth%U68vJF6jkDo
+z0|$=1^&bSP<~Q&gij+gNS5DkqC8wU4-NZ$u%z8i1cxHCL{np<W7AypIT=~%|DG2=%
+zL2iY)GuZ&=2oXeZfI{rxP;nHD6!ZiU<qIMz#T_+o8i03l5jiT+-XOd1TcmA;TVcD!
+z{BAprQm%(Fp+VZrJH^|W2b0g>93hGvOpv1x+`^8kAgXn8Qm{2qhuQ#0pTL}%tkCla
+zDhlwW*vVH#L?0Fh7&>6iY-n62+)^Bqm_XU$=8K#w5Wf~4BrNXGW|t&!5b(uXtycH^
+zpi7yz9}7(UH2oAa!V5CyM*cw_TO8Gk{E%`@VzCJl(5Sm(V_qb5&+i3YTV*9+#mWG@
+zu-B#m*##bkCmTJFTb>7+^#Tfh+4Da3{6H)wB0>`y5gIkyG-X15UV2T#c%SZwWw^0P
+zi1e5ya^<Z!4yYf^l2)A1`K27A3FOgv>+wVPZAw|{Zf-q&=5EvULpM&`?N=`w4Oc4Q
+zUKYgtd$BG^bKhff_kXmRhx4<qCkISimIUFX44{88G98%@GF7>u_Zyjo%-dhBk+C|y
+zxjMeSoE22lIzs?c0hxi!6_H++>7{XX?eOlXy7rx(R_i~j^-;B+6*bWTFcpxMtg7CB
+zE(Tl7N$lDhH%Z5jTJbu0FLjiH&1l{dWwLe&ymMn?b{UV@3WVa1O5XuwD#jS7WBU}{
+ayZU5$1?w5Q3WwIHa_3AWrvJ&xeg6QC^Yf(u
+
+literal 0
+HcmV?d00001
+
+diff --git a/myprojectdpoll/migrations/__pycache__/0006_profile.cpython-311.pyc b/myprojectdpoll/migrations/__pycache__/0006_profile.cpython-311.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..609701e382a0e22880989cad95675d31e635d976
+GIT binary patch
+literal 1443
+zcmZuxy>Ht_6hD55BK2WQfm1;p`T?Y^q&9|^7KTw2RV2GkYsXG(4;2JoDcy;oOp)r5
+zlA@x6QFQ2-t^Et!6!ssGp+GZsqyY}XO$9n-Q{YUQ`be3IjpmN`_<Qdj-@UKn@7Zh$
+z!T9l~XU3s~(7z!QkHjUo*ah$_B8UhU>In@&2(f61J*gq}<c1val9gyEBKisu`Da8D
+zRO%*ULnmPQ6xM7sl0@1=W#xIumIbc5)bmW+aLXc3^-P25p6S>wS9%VimV2*#`Casi
+zyajZT5kj9RY6t{1L=nMxa;!)bT_wgRpmz#uHi%$|jbx;)&SfHzK%#YH+YkZF1X0eC
+zCt&k*Znq;6HPTGazm<tb<g?WE2th9$>1AR)n(Z#cxU0?4;vD5-bk+B>%!vr+!<vnb
+zXh>(->oP-V<jDf$bCGM?aq=LO3%zllIbGWJNZ+w6URqgM`4ltSbA}WT9gi~H*Ijqy
+zFmlPZA?eiicygCH9n+#*G|B!37w^`~GSBD(&%td*b&nFB?lZHevoSuRW3IWBnYv~E
+zKzU|JS<7)Lw)Gz6H#-h9sQ3CD&pD#@a{|GXC7x(mx_tx{*B@bv+J^U#%k}^~l?PxD
+zBG4QgLjzC`Jn<Y5$dOg0V^WK__sTc8ilc)t<|&M!TLu;doWc0}fo_G$7_+c=e90Z@
+z{l4CUeM0-xCe&_^S=f<$v3jt-i4XSHAK>ks`uY~n%r#8v@^mc<c{^-H7G4ORxnmkt
+zNXAC!2G?p2bvA?99h>euKxV8$y1H#RTqG^7MsYw_^JJ~MSF6_7dCKY2%TE6TU4UWq
+z>YLhH^8jLZo7Fp;cbj$U9(hi`S>N5++G<8sY+f&F^Yv|MLU}*KQ1P&G%l$D6FJDB$
+zK6n2Day*|?1!<*UQi1x>6E!G(d9GFiwK`EZrU_|DIo_IPkoIo4{mvx+_CNWXexdSs
+z7!)c`<-c$F4eZ;@FSzFgHz>G%&YR>*er4^+he2iS*^>X@z;Ax%SM>9W9#nKc*P7%D
+ze)0BiZw1BMPnAElV0ANCy&tT8>mPQ4!=Yasofk(zapdP7O_TD{!ZeZ8QZEpYmm!%-
+z+70FS>u|D<<A};CPtTIO3_aVK)ls{YkXBUkS*?n5;qvTfvK$wJeGpq?l@LY7KLPYg
+z{e0F*U$7Nm!#{`X0hvmIAVA`T_kHx<)n|fA{+pi36}7376O<|XKY5%Aa<^WD8!z9m
+H8+r8~O301G
+
+literal 0
+HcmV?d00001
+
+diff --git a/myprojectdpoll/migrations/__pycache__/0007_alter_voter_id_doc_alter_voter_photo.cpython-311.pyc b/myprojectdpoll/migrations/__pycache__/0007_alter_voter_id_doc_alter_voter_photo.cpython-311.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..ddaf90b1638f377e2b5f40b1cd3620ec205e4d67
+GIT binary patch
+literal 1003
+zcma)3%}>-o6rbtWZYvmRNc`pi#JDlRJ!xWy2})25?wW{3n<kU8Gn6iEr?$H$c;eu}
+ziwQUW0izf>@F$S?4?wbqO|PE3mB5LUZ)RD{f(K{XH}7M9Z+`E+Z^OeDg7wDy>H7*o
+zzl70W`iXKl4az2>h~f}M*ujzFC>SZ|38KnJL{)~HY9I6!v>&IIqf+f9s_4H(xT54%
+z6!@vv3V595M#L!#vqm2&PDuvN!!IB<5kn59$WbWvv7;)8Y0W+<c$x~2(JTp|SX6_p
+zZySRYwo8Ndxh!RwrQFN$zgc|6F{ufqS-JVVUlSB~F<MJf-eipyO?VjQL)B{a9s$>K
+z5VBl<&s!|bjeru$8;c)GLFD-?yIWCneJS+f)m)3)fHK=j$URD093qzN6N$ZuL0CwA
+zIbb2p^<;&&cnv6&i3}5xTZF*%cE~^<BII4$3k5`2lqD>tEN%oWOT~n8YbFFbb0S%)
+z35PicETx@W^Mcxm&J%VrweRRqH0pTe@dNi&#?s84dGvJNon_f-izn{vi~7QXD@%6=
+zJK_GFybC?KPdxE9kqsfeehj!|ZBxlwYQS?+2qpUrV*PX%1~TsysxoS<FBBFs$39t|
+z^3Cq$vF^y#u06hSt7DIEjqc3u&hOc^eY@7NYeh*jtpfz&NQg72D_wg+peD8^cNTZw
+z?%DNyyWX+uXHml!Y-9bI*y;5?zgk7hP1^KgpHI;x*<sn$UIo|0HF@_2XvgL0-k2Vy
+qV_;(Vv)3RB6=Mul;mRJmef}$q5o{Fbyx6chmnIKH;OHMw`R*T?nFNdg
+
+literal 0
+HcmV?d00001
+
+diff --git a/myprojectdpoll/migrations/__pycache__/0008_alter_voter_id_doc.cpython-311.pyc b/myprojectdpoll/migrations/__pycache__/0008_alter_voter_id_doc.cpython-311.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..90a90e92b7a08a73ce99e9d765f7fab61d997cb3
+GIT binary patch
+literal 875
+zcmZuvO>5LZ7@o=3ZbB;>3bvv>6cP8*?oE**RF_(1tuAVj5FFB-am_Z##3U=!(;hr{
+z?8*KEKd=XXg5X)Gu!m)?p1h@OPd)igc2ikuCOmoGk9p_GlYE+;wGdn%=6`g4VuXIn
+zpuF@68La}@M-)*Upb$GaR2&5(1>Hkbd55UVa91rieFXOPG;&m`JwY}7k1W>|VTFDt
+z@iL!BsW3uLS&+8No$_f;g3${g`-mY2Q{*TVcd(->h-uwY6dX-u#^_cidl1!N=?BKN
+zgoDa-43ny~3ZhJ5J}lLMv~%HZobWDdXEf$PAZqn`{RZ)Zj3wj^m*`VMd3!1qzv3Ae
+zdQlg~xZ&wr3)*@ii?Vd3rV4#K@S+`|MLn2m_Tqqhlw=$#R^b4NypTazqW;on0o?>`
+zRZ`>$5f&lP*9#c%8A4w7yg>HKh_aYPltpcyrHM3MSZh-7x}1_|GGVU!0V`r*@t94_
+z|AI!+wUe#8x7=qbOHz03&c=PW!P1?K$8O{Cqh`}Bd~m02asPcl7Yw>N<;M8^m*d^U
+zfZ+v5l0FCMpRU|M<_6AHWzOg~a|@Y^@2x@g%JAai@WR5-UfR1hu$Mm1eQSJg9@?#6
+zc57g_@``3!M+o3pLarLN(SIOUvQQqiS<{3`yI$1c%XGW2qp)BsW?r@xy_bNUR9DBI
+t-cBw<2!B3Gw*Yb#V+;au?GRl*d*{XsHga?p_N>AAt4FeM{GV!Z?qBwk>AL^`
+
+literal 0
+HcmV?d00001
+
+diff --git a/myprojectdpoll/migrations/__pycache__/0009_voter_address.cpython-311.pyc b/myprojectdpoll/migrations/__pycache__/0009_voter_address.cpython-311.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..5a31e27d48c2198a4cf314a60bccc1a447150102
+GIT binary patch
+literal 834
+zcmZuvO;6NN6n(E>(>7qFAwdycpfS#d%*u!%lc2<}jHnS@G)-R0+~+t$zif+v-7H+V
+zWXC@Mjr;)j{sBy8G3nM7yOLqWM(^vi7=rJ$r}y;T_wG5jJ(!#{367hKKRXAMkl%t-
+zLoI{R5(aw&2vCps)TX{<OO#0DDFNv-0h!aDTy5IN==(XdWl-Ldx_T^@>r!U=-A?SL
+z-7rWp%@2WlNxRx9o_a|}4hDOK6Pp6DC7>N@%M#&AuM&l&LA=p=wQ>&u1=K@rUqS(R
+zkH=x{q98m+2OT9DnenpHg2Jx&J5e0=csqqC^t^1Q(P%tiu9xzdeF_D3fkD{L)PiL-
+z7a-<IvUdCj3*iCkhUW&GXwcne9uGR{hq{bRSY(0g^GqpFec$CCtYUec74I3#OvW&8
+z%i|bNF!piF^+c{<z#|?2587Rx#G<R2z6|h0oDnO68f$zzEqG>z5ifiDjf{l-vp0_)
+zI_n9K6KDC+v**qVPd3vqa#miyYPFogsB_V`^Y8mO*n!2;duetd+KDwhw*V0&>j?ex
+znQO$jpUcv;)^Ft|G3LIQ1O3Ku=GJg(c4*D--W^!;U#EZEKC+s>tmeRK<~7AIPYA-P
+zfLzurt^Y#I_<B`mwXS3a^xU8mF2F|7gu?n*$u*Hy<j!JrrZ0^<*^K9q;tx%dcL=#m
+hDMfX(enjqFzH)7XYB{+KyXN5PofENe`k&RJ?q3V-*rfmf
+
+literal 0
+HcmV?d00001
+
+diff --git a/myprojectdpoll/models.py b/myprojectdpoll/models.py
+index 0c17991..9953632 100644
+--- a/myprojectdpoll/models.py
++++ b/myprojectdpoll/models.py
+@@ -1,7 +1,9 @@
+ from django.db import models
++from django.contrib.auth.hashers import make_password, check_password
++from django.contrib.auth.models import User
+ import random
+ import string
+-from django.contrib.auth.hashers import make_password, check_password
++
+ 
+ class Voter(models.Model):
+     full_name = models.CharField(max_length=255)
+@@ -9,20 +11,18 @@ class Voter(models.Model):
+     phone = models.CharField(max_length=20)
+     dob = models.DateField()
+     sex = models.CharField(max_length=10)
++    address = models.TextField(max_length=255, blank=True)  
+     id_type = models.CharField(max_length=50)
+     id_number = models.CharField(max_length=50)
+-    id_doc = models.FileField(upload_to="id_docs/", null=True, blank=True)
+-    photo = models.FileField(upload_to="photos/", null=True, blank=True)
++    id_doc = models.FileField(upload_to="documents/", null=True, blank=True)
++    photo = models.ImageField(upload_to="images/", null=True, blank=True)
+     unique_id = models.CharField(max_length=8, unique=True, blank=True)  # Generated ID
+     #password = models.CharField(max_length=128)  # Store hashed password
+-    password = models.CharField(max_length=128, null=True, blank=True)  # Temporarily allow blank
+-
++    consent = models.BooleanField(default=False)
+ 
+     def save(self, *args, **kwargs):
+         if not self.unique_id:
+             self.unique_id = self.generate_unique_id()
+-        if not self.password.startswith('pbkdf2_sha256$'):  # Prevent re-hashing an already hashed password
+-            self.password = make_password(self.password)
+         super().save(*args, **kwargs)
+ 
+     def generate_unique_id(self):
+@@ -38,3 +38,10 @@ class Voter(models.Model):
+ 
+     def __str__(self):
+         return self.full_name
++
++class Profile(models.Model):
++    user = models.OneToOneField(User, on_delete=models.CASCADE)
++    forget_password_token = models.CharField(max_length=100, blank=True, null=True)
++
++    def __str__(self):
++        return self.user.username
+\ No newline at end of file
+diff --git a/myprojectdpoll/urls.py b/myprojectdpoll/urls.py
+index d9a0d78..f3e6ccc 100644
+--- a/myprojectdpoll/urls.py
++++ b/myprojectdpoll/urls.py
+@@ -1,11 +1,21 @@
+-
+ from django.contrib import admin
+ from django.urls import path, include
+ from myprojectdpoll import views
+-from .views import register_voter
+-
++from .views import register_voter, set_password, ChangePassword, Logout, dashboard_view, home, login_voter_view, register_view, ForgetPassword
++from django.conf import settings
++from django.conf.urls.static import static
+ urlpatterns = [
+-    path('login/', views.login_view, name='login'),
+-    path('register/', views.register_view, name='register'),
+-    path("api/register/", register_voter),
++    path('', home, name='home'),
++    path('login/', login_voter_view, name='login'),
++    path('register/',views.register_view, name='register'),
++    path("api/register-voter/",register_voter, name='register_voter'),
++    path("api/login/", views.login_voter_view),  # Ensure this path is correct
++    path("forgot/", ForgetPassword, name="forgot"),
++    path("setpassword/", set_password, name="password"),
++    path("dashboard/", dashboard_view, name="dashboard"),
++    path("changepassword/<token>/", ChangePassword, name="changepassword"),
++    path('logout/', Logout, name='logout'),
+ ]
++
++if settings.DEBUG:
++    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+\ No newline at end of file
+diff --git a/myprojectdpoll/views.py b/myprojectdpoll/views.py
+index fe6caf0..6f9708b 100644
+--- a/myprojectdpoll/views.py
++++ b/myprojectdpoll/views.py
+@@ -2,16 +2,25 @@ import re
+ import random
+ import string
+ import json
+-import base64
+-from django.core.files.base import ContentFile
++import uuid
+ from django.http import JsonResponse
+ from django.views.decorators.csrf import csrf_exempt
+-from django.shortcuts import render
+ from django.contrib.auth.hashers import check_password, make_password
+-from rest_framework import serializers, views, status
++from rest_framework import serializers
+ from rest_framework.response import Response
+ from rest_framework.decorators import api_view
+-from .models import Voter
++from .models import Voter, Profile
++from django.core.mail import send_mail
++from django.contrib.auth.tokens import default_token_generator
++from django.shortcuts import render, redirect
++from django.contrib import messages
++from django.utils.http import urlsafe_base64_encode
++from django.utils.encoding import force_bytes
++from django.template.loader import render_to_string
++from django.conf import settings
++from django.contrib.auth.forms import SetPasswordForm
++from .helpers import send_forget_password_mail
++from django.contrib.auth import authenticate, login, logout
+ 
+ # **Unique ID Generator**
+ def generate_unique_id():
+@@ -23,114 +32,205 @@ def generate_unique_id():
+ def validate_password(password):
+     return bool(re.fullmatch(r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password))
+ 
++@csrf_exempt
++def set_password(request):
++    if request.method == "POST":
++        unique_id = request.POST.get("unique_id")
++        password = request.POST.get("password")
++
++        try:
++            voter = Voter.objects.get(unique_id=unique_id)
++            voter.password = make_password(password)
++            voter.save()
++            return JsonResponse({"message": "Password set successfully"}, status=200)
++        except Voter.DoesNotExist:
++            return JsonResponse({"error": "Invalid Unique ID"}, status=400)
++
++    return JsonResponse({"error": "Invalid request method"}, status=405)
++
+ # **Serializer for Voter**
+ class VoterSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = Voter
+-        fields = ["full_name", "email", "phone", "dob", "sex", "id_type", "id_number", "password"]
++        fields = ["full_name", "email", "phone", "dob", "sex", "id_type", "id_number", "id_doc", "photo", "password"]
+ 
+     def create(self, validated_data):
+         validated_data["unique_id"] = generate_unique_id()  # Generate Unique ID
+         validated_data["password"] = make_password(validated_data["password"])  # Hash password
+         return super().create(validated_data)
+-
++from django.views.decorators.csrf import csrf_protect
+ # **Register Voter API**
+-@csrf_exempt
++@csrf_protect
+ def register_voter(request):
+     if request.method == "POST":
+         try:
+-            data = json.loads(request.body)
++            data = request.POST
++            files = request.FILES
+ 
+-            # Extract Data
+             full_name = data.get("fullName", "").strip()
+             email = data.get("email", "").strip()
+             phone = data.get("phone", "").strip()
+-            dob = data.get("dateOfBirth", "").strip()
++            dob_str = data.get("dateOfBirth", "").strip()
+             sex = data.get("sex", "").strip()
+             address = data.get("address", "").strip()
+             id_type = data.get("identificationType", "").strip()
+             id_number = data.get("identificationNumber", "").strip()
+-            id_document = data.get("idDocument", "")
+-            photo = data.get("photo", "")
+-            password = data.get("password", "").strip()
+-            consent = data.get("consent", False)
++            id_doc = files.get("idDoc")
++            photo = files.get("photo")
++            consent = data.get("consent", "false").lower() == "true"
+ 
+-            # **Validations**
+-            if not (full_name and email and phone and dob and sex and address and id_type and id_number and password):
++
++            if not (full_name and email and phone and dob and sex and address and id_type and id_number):
+                 return JsonResponse({"error": "All fields are required"}, status=400)
+ 
++            # Phone validation
+             if len(phone) != 10 or not phone.isdigit():
+                 return JsonResponse({"error": "Phone number must be 10 digits"}, status=400)
+ 
+-            if int(dob.split("-")[0]) > 2006:
++            # Age validation
++           
++            if not address:
++               return JsonResponse({"error": "Address is required"}, status=400)
++            # Convert dob string to date object
++            dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
++            if dob.year > 2006:
+                 return JsonResponse({"error": "You must be at least 18 years old"}, status=400)
+-
++            # ID Validation
+             if id_type not in ["Aadhar Card", "Voter Id"]:
+                 return JsonResponse({"error": "Identification type must be 'Aadhar Card' or 'Voter Id'"}, status=400)
+ 
+             if id_type == "Aadhar Card" and not (len(id_number) == 12 and id_number.isdigit()):
+                 return JsonResponse({"error": "Aadhar Card must have 12 digits"}, status=400)
+ 
+-            if id_type == "Voter Id" and not (re.match(r"^[A-Z]{3}[0-9]{7}$", id_number)):
++            if id_type == "Voter Id" and not re.match(r"^[A-Z]{3}[0-9]{7}$", id_number):
+                 return JsonResponse({"error": "Voter ID must start with 3 uppercase letters followed by 7 digits"}, status=400)
+ 
+             if not consent:
+                 return JsonResponse({"error": "You must consent to the terms"}, status=400)
+ 
+-            # Create voter
++            # File validation
++            if id_doc:
++                if not id_doc.name.lower().endswith(('.pdf', '.jpg', '.jpeg', '.png')):
++                    return JsonResponse({"error": "ID Document must be in PDF, JPG, JPEG, or PNG format"}, status=400)
++                if id_doc.size > 5 * 1024 * 1024:  # 5MB limit
++                    return JsonResponse({"error": "ID Document must be less than 5MB"}, status=400)
++
++            if photo:
++                if not photo.name.lower().endswith(('.jpg', '.jpeg', '.png')):
++                    return JsonResponse({"error": "Photo must be in JPG, JPEG, or PNG format"}, status=400)
++                if photo.size > 2 * 1024 * 1024:  # 2MB limit
++                    return JsonResponse({"error": "Photo must be less than 2MB"}, status=400)
++
+             voter = Voter.objects.create(
+                 full_name=full_name,
+                 email=email,
+                 phone=phone,
+-                date_of_birth=dob,
++                dob=dob,
+                 sex=sex,
+                 address=address,
+-                identification_type=id_type,
+-                identification_number=id_number,
+-                password=make_password(password),
+-                unique_id=generate_unique_id()
++                id_type=id_type,
++                id_number=id_number,
++                id_doc=id_doc,
++                photo=photo,
++                unique_id=generate_unique_id(),
++                consent=consent
+             )
+ 
+-            # Decode and Save ID Document
+-            if id_document:
+-                id_doc_data = base64.b64decode(id_document.split(",")[1])
+-                voter.id_document.save(f"{voter.id}_id.png", ContentFile(id_doc_data))
+-
+-            # Decode and Save Photo
+-            if photo:
+-                photo_data = base64.b64decode(photo.split(",")[1])
+-                voter.photo.save(f"{voter.id}_photo.png", ContentFile(photo_data))
+-
+             voter.save()
+ 
+             return JsonResponse({"message": "Voter registered successfully", "UniqueId": voter.unique_id}, status=201)
+ 
+-        except json.JSONDecodeError:
+-            return JsonResponse({"error": "Invalid JSON data"}, status=400)
++        except Exception as e:
++            return JsonResponse({"error": f"An error occurred: {str(e)}"}, status=500)
+ 
+     return JsonResponse({"error": "Invalid request method"}, status=405)
+ 
+-# **Login API**
+ @api_view(["POST"])
+ def login_voter(request):
+     unique_id = request.data.get("unique_id")
+     password = request.data.get("password")
+ 
++    if not unique_id or not password:
++        return Response({"error": "Unique ID and password are required"}, status=400)
++
+     try:
+         voter = Voter.objects.get(unique_id=unique_id)
+-        if check_password(password, voter.password):
++        if voter.check_password(password):
+             return Response({"message": "Login successful!"}, status=200)
+         else:
+             return Response({"error": "Invalid password"}, status=400)
+     except Voter.DoesNotExist:
+         return Response({"error": "Invalid Unique ID"}, status=400)
+ 
+-# **Page Views**
+-def index(request):
+-    return render(request, 'home.html')
++def Logout(request):
++    logout(request)
++    return redirect('/')
+ 
+-def login_view(request):
+-    return render(request, 'login.html')
++def ChangePassword(request, token):
++    context = {}
++    
++    try:
++        profile_obj = Profile.objects.filter(forget_password_token=token).first()
++        if not profile_obj:
++            messages.error(request, 'Invalid or expired token.')
++            return redirect('/forgot/')
++
++        voter_obj = profile_obj.user
++        context = {'unique_id': voter_obj.unique_id}
++        
++        if request.method == 'POST':
++            new_password = request.POST.get('new_password')
++            confirm_password = request.POST.get('reconfirm_password')
++            
++            if new_password != confirm_password:
++                messages.error(request, 'Both passwords should be equal.')
++                return redirect(f'/change-password/{token}/')
++
++            voter_obj.password = make_password(new_password)
++            voter_obj.save()
++
++            messages.success(request, 'Password changed successfully. Please login.')
++            return redirect('/login/')
++        
++    except Exception as e:
++        print(e)
++    
++    return render(request, 'changepass.html', context)
++
++def ForgetPassword(request):
++    try:
++        if request.method == 'POST':
++            unique_id = request.POST.get('unique_id')
++            
++            if not Voter.objects.filter(unique_id=unique_id).first():
++                messages.success(request, 'No user found with this Unique ID.')
++                return redirect('/forgot/')
++
++            voter_obj = Voter.objects.get(unique_id=unique_id)
++            token = str(uuid.uuid4())
+ 
++            profile_obj, created = Profile.objects.get_or_create(user=voter_obj)
++            profile_obj.forget_password_token = token
++            profile_obj.save()
++
++            send_forget_password_mail(voter_obj.email, token)
++            messages.success(request, 'An email is sent.')
++            return redirect('/forgot/')
++                
++    except Exception as e:
++        print(e)
++    return render(request, 'forgot.html')
++
++
++
++def login_voter_view(request):
++    return render(request, 'login.html')
++@csrf_protect
+ def register_view(request):
+     return render(request, 'register.html')
++
++def dashboard_view(request):
++    return render(request, 'dashboard.html')
++# **Page Views**
++def home(request):
++    return render(request, 'home.html')
+\ No newline at end of file
+diff --git a/static/css/dashboard.css b/static/css/dashboard.css
+new file mode 100644
+index 0000000..4ce460c
+--- /dev/null
++++ b/static/css/dashboard.css
+@@ -0,0 +1,91 @@
++body {
++    font-family: Arial, sans-serif;
++    margin: 0;
++    padding: 0;
++    background-color: #f4f4f4;
++}
++
++header {
++    background-color: #4a90e2;
++    color: white;
++    padding: 15px;
++    text-align: center;
++    font-size: 24px;
++    display: flex;
++    align-items: center;
++    justify-content: space-between;
++}
++
++.menu-icon {
++    font-size: 24px;
++    cursor: pointer;
++    padding: 10px;
++}
++
++.container {
++    display: flex;
++}
++
++nav {
++    background-color: #4a90e2;
++    width: 250px;
++    padding: 20px;
++    min-height: 100vh;
++    transition: transform 0.3s ease-in-out;
++}
++
++nav ul {
++    list-style-type: none;
++    padding: 0;
++}
++
++nav ul li {
++    margin: 15px 0;
++}
++
++nav ul li button {
++    width: 100%;
++    padding: 10px;
++    border: none;
++    background-color: #ccc;
++    font-size: 16px;
++    cursor: pointer;
++    text-align: left;
++    border-radius: 5px;
++}
++
++nav ul li button:hover {
++    background-color: #bbb;
++}
++
++main {
++    flex-grow: 1;
++    padding: 20px;
++    background-color: white;
++}
++
++.profile {
++    display: flex;
++    align-items: center;
++    background: #fff;
++    padding: 20px;
++    border-radius: 8px;
++    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
++}
++
++.profile img {
++    width: 100px;
++    height: 100px;
++    border-radius: 50%;
++    background: black;
++    margin-right: 20px;
++}
++
++.details {
++    font-size: 18px;
++}
++
++.age {
++    float: right;
++    font-weight: bold;
++}
+diff --git a/static/css/forgot.css b/static/css/forgot.css
+new file mode 100644
+index 0000000..0468476
+--- /dev/null
++++ b/static/css/forgot.css
+@@ -0,0 +1,42 @@
++body {
++    font-family: Arial, sans-serif;
++    text-align: center;
++    margin: 50px;
++    background-color: #f4f4f4;
++}
++
++.container {
++    width: 400px;
++    margin: auto;
++    padding: 20px;
++    background: white;
++    border-radius: 10px;
++    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
++}
++
++input {
++    padding: 10px;
++    margin: 10px;
++    width: 90%;
++    border: 1px solid #ccc;
++    border-radius: 5px;
++}
++
++button {
++    padding: 10px;
++    width: 100%;
++    background: #007bff;
++    color: white;
++    border: none;
++    cursor: pointer;
++    border-radius: 5px;
++}
++
++button:hover {
++    background: #0056b3;
++}
++
++#response {
++    margin-top: 10px;
++    color: green;
++}
+diff --git a/static/css/home.css b/static/css/home.css
+new file mode 100644
+index 0000000..f6e46d4
+--- /dev/null
++++ b/static/css/home.css
+@@ -0,0 +1,148 @@
++@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
++
++* {
++    margin: 0;
++    padding: 0;
++    box-sizing: border-box;
++    font-family: 'Poppins', sans-serif;
++}
++
++body {
++    background-color: #fffff;
++    color: #fff;
++}
++
++/* HEADER */
++header {
++    display: flex;
++    justify-content: space-between;
++    align-items: center;
++    background-color: #4A90E2;
++    padding: 15px 40px;
++}
++
++.logo {
++    font-size: 24px;
++    font-weight: bold;
++    color: white;
++}
++
++nav ul {
++    display: flex;
++    list-style: none;
++    gap: 20px;
++}
++
++nav ul li a {
++    text-decoration: none;
++    color: white;
++    font-size: 16px;
++    font-weight: bold;
++}
++
++/* HERO SECTION */
++.hero {
++    display: flex;
++    justify-content: center;
++    align-items: center;
++    height: 80vh;
++    padding: 40px;
++    gap: 50px;
++}
++
++.hero-text {
++    max-width: 500px;
++}
++
++.hero-text h1 {
++    font-size: 32px;
++    margin-bottom: 10px;
++    color: Black;
++}
++
++.hero-text p {
++    font-size: 18px;
++    color: Black;
++    margin-bottom: 20px;
++}
++
++/* BUTTONS */
++.btn-group {
++    display: flex;
++    gap: 15px;
++}
++
++.btn-outline, .btn-primary {
++    text-decoration: none;
++    padding: 10px 20px;
++    font-size: 16px;
++    border-radius: 5px;
++}
++
++.btn-outline {
++    border: 2px solid #4A90E2;
++    color:#4A90E2 ;
++}
++
++.btn-primary {
++    background-color: #4A90E2;
++    color: white;
++    border: none;
++}
++
++.btn-outline:hover {
++    background-color:  #4A90E2;
++    color: white;
++}
++
++.btn-primary:hover {
++    background-color:  #4A90E2;
++}
++
++/* IMAGE PLACEHOLDER */
++.hero-image {
++    width: 800px;
++    height: 500px;
++    border-radius: 8px;
++}
++
++/* RESPONSIVE DESIGN */
++@media (max-width: 768px) {
++    header {
++        flex-direction: column;
++        align-items: center;
++        text-align: center;
++    }
++
++    nav ul {
++        flex-direction: column;
++        gap: 10px;
++        margin-top: 10px;
++    }
++
++    .hero {
++        flex-direction: column;
++        text-align: center;
++        gap: 30px;
++    }
++
++    .hero-image {
++        width: 100%;
++        height: 200px;
++    }
++}
++
++@media (max-width: 480px) {
++    .hero-text h1 {
++        font-size: 24px;
++    }
++
++    .hero-text p {
++        font-size: 16px;
++    }
++
++    .btn-outline, .btn-primary {
++        font-size: 14px;
++        padding: 8px 16px;
++    }
++}
+diff --git a/static/css/login.css b/static/css/login.css
+new file mode 100644
+index 0000000..e083770
+--- /dev/null
++++ b/static/css/login.css
+@@ -0,0 +1,166 @@
++@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
++
++* {
++    margin: 0;
++    padding: 0;
++    box-sizing: border-box;
++    font-family: 'Poppins', sans-serif;
++}
++
++body {
++    background-color: #ffffff;
++    color: #000;
++    text-align: center;
++}
++
++/* Header Styling */
++.header {
++    background-color: #4A90E2;
++    padding: 20px;
++    text-align: left;
++}
++
++.header h1 {
++    font-size: 24px;
++    font-weight: bold;
++    color: white;
++    padding-left: 20px;
++}
++
++/* Container Layout */
++.container {
++    display: flex;
++    justify-content: center;
++    align-items: center;
++    height: 80vh;
++    gap: 50px;
++    flex-wrap: wrap;
++    padding: 20px;
++}
++
++/* Login and Register Box */
++.login-box, .register-box {
++    background: #4A90E2;
++    padding: 30px;
++    border-radius: 8px;
++    width: 100%;
++    max-width: 350px;
++    text-align: left;
++    color: white;
++}
++
++h2 {
++    font-size: 22px;
++    margin-bottom: 15px;
++}
++
++label {
++    display: block;
++    margin-top: 15px;
++    font-size: 14px;
++}
++
++/* Input Group */
++.input-group {
++    display: flex;
++    align-items: center;
++    background: white;
++    padding: 10px;
++    border-radius: 5px;
++    margin-top: 5px;
++    width: 100%;
++    gap: 8px;
++}
++
++.input-group i {
++    color: #888;
++    font-size: 16px;
++}
++
++.input-group input {
++    flex: 1;
++    background: none;
++    border: none;
++    color: black;
++    font-size: 14px;
++    outline: none;
++    min-width: 0;
++    padding: 8px;
++}
++
++.input-group button {
++    background: #ddd;
++    border: none;
++    color: black;
++    padding: 5px 8px;
++    cursor: pointer;
++    font-size: 12px;
++    border-radius: 5px;
++    white-space: nowrap;
++}
++
++.input-group button:hover {
++    background: #4A90E2;
++}
++
++/* Submit and Register Buttons */
++.submit-btn, .register-btn {
++    width: 100%;
++    background: white;
++    border: none;
++    color: black;
++    padding: 10px;
++    font-size: 16px;
++    cursor: pointer;
++    border-radius: 5px;
++    margin-top: 15px;
++    transition: background 0.3s ease;
++}
++
++.submit-btn:hover, .register-btn:hover {
++    background: #4A90E2;
++    color: white;
++}
++
++/* Responsive Design */
++@media (max-width: 768px) {
++    .container {
++        flex-direction: column;
++        align-items: center;
++        gap: 20px;
++    }
++
++    .login-box, .register-box {
++        width: 90%;
++        text-align: center;
++    }
++
++    .input-group {
++        flex-direction: column;
++        align-items: stretch;
++    }
++
++    .input-group i {
++        margin-bottom: 5px;
++    }
++
++    .small-btn {
++        margin-top: 5px;
++        width: 100%;
++    }
++}
++
++@media (max-width: 480px) {
++    .header h1 {
++        font-size: 20px;
++    }
++
++    .login-box, .register-box {
++        padding: 20px;
++        max-width: 90%;
++    }
++
++    h2 {
++        font-size: 18px;
++    }
++}
+diff --git a/static/css/password.css b/static/css/password.css
+new file mode 100644
+index 0000000..f2155ae
+--- /dev/null
++++ b/static/css/password.css
+@@ -0,0 +1,65 @@
++body {
++    font-family: Arial, sans-serif;
++    background-color: #f9f9f9;
++    text-align: left;
++}
++
++.container {
++    max-width: 400px;
++    
++    margin: 50px auto;
++    background: white;
++    padding: 20px;
++    border-radius: 8px;
++    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
++    background-size: cover;
++    flex-wrap: wrap;
++}
++
++
++
++label {
++    display: block;
++    margin-top: 10px;
++    font-weight: bold;
++}
++
++input {
++    width: 100%;
++    padding: 10px;
++    margin-top: 5px;
++    border: 1px solid #ccc;
++    border-radius: 5px;
++}
++
++small {
++    display: block;
++    color: red;
++    font-size: 12px;
++    margin-bottom: 10px;
++}
++
++button {
++    background-color: #4285F4;
++    color: white;
++    border: none;
++    padding: 10px;
++    width: 100%;
++    border-radius: 5px;
++    cursor: pointer;
++}
++
++button:hover {
++    background-color: #3367D6;
++}
++.header {
++    background-color: #4A90E2;
++    padding: 10px;
++    text-align: left;
++}
++.header h1 {
++    font-size: 24px;
++    font-weight: bold;
++    color: white;
++    padding-left: 20px;
++}
+diff --git a/static/css/register.css b/static/css/register.css
+new file mode 100644
+index 0000000..6ac8cd7
+--- /dev/null
++++ b/static/css/register.css
+@@ -0,0 +1,3 @@
++@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
++
++/* Additional custom styles can be added here */
+\ No newline at end of file
+diff --git a/static/js/dashboard.js b/static/js/dashboard.js
+new file mode 100644
+index 0000000..b3169f1
+--- /dev/null
++++ b/static/js/dashboard.js
+@@ -0,0 +1,13 @@
++function toggleMenu() {
++    const sidebar = document.getElementById('sidebar');
++    sidebar.style.transform = sidebar.style.transform === "translateX(-100%)" ? "translateX(0)" : "translateX(-100%)";
++}
++
++function navigate(page) {
++    alert("Navigating to " + page);
++}
++
++function logout() {
++    alert("Logging out...");
++    window.location.href = "login.html";
++}
+diff --git a/static/js/login.js b/static/js/login.js
+index 25fa5c6..9164a95 100644
+--- a/static/js/login.js
++++ b/static/js/login.js
+@@ -1,36 +1,29 @@
+-<script>
+-    document.querySelector('.submit-btn').addEventListener('click', function() {
+-        const username = document.getElementById('unique-id').value;
+-        const password = document.getElementById('password').value;
++document.querySelector('.submit-btn').addEventListener('click', function() {
++    const unique_id = document.getElementById('unique-id').value;
++    const password = document.getElementById('password').value;
+ 
+-        fetch('/myprojectdpoll/login/', {
+-            method: 'POST',
+-            headers: {
+-                'Content-Type': 'application/json',
+-            },
+-            body: JSON.stringify({ username, password }),
+-        })
+-        .then(response => response.json())
+-        .then(data => {
+-            if (data.message) {
+-                alert(data.message);
+-            } else {
+-                alert('Error: ' + JSON.stringify(data));
+-            }
+-        })
+-        .catch((error) => {
+-            console.error('Error:', error);
+-        });
+-    });
+-    document.querySelector('.submit-btn').addEventListener('click', function() {
+-        const username = document.getElementById('unique-id').value;
+-        const password = document.getElementById('password').value;
++    if (!unique_id || !password) {
++        alert('Please fill in all fields.');
++        return;
++    }
+ 
+-        if (!username || !password) {
+-            alert('Please fill in all fields.');
+-            return;
++    fetch('/api/login/', {
++        method: 'POST',
++        headers: {
++            'Content-Type': 'application/json',
++        },
++        body: JSON.stringify({ unique_id, password }),
++    })
++    .then(response => response.json())
++    .then(data => {
++        if (data.message) {
++            alert(data.message);
++            window.location.href = '/dashboard/';  // Redirect to dashboard
++        } else {
++            alert('Error: ' + JSON.stringify(data));
+         }
+-
+-        // Proceed with fetch request...
++    })
++    .catch((error) => {
++        console.error('Error:', error);
+     });
+-</script>
+\ No newline at end of file
++});
+diff --git a/static/js/password.js b/static/js/password.js
+new file mode 100644
+index 0000000..7cca4ea
+--- /dev/null
++++ b/static/js/password.js
+@@ -0,0 +1,22 @@
++document.getElementById("confirm-btn").addEventListener("click", function () {
++    const password = document.getElementById("password").value;
++    const confirmPassword = document.getElementById("confirm-password").value;
++    const matchMessage = document.getElementById("match-message");
++
++    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
++
++    if (!passwordPattern.test(password)) {
++        matchMessage.style.color = "red";
++        matchMessage.textContent = "Password does not meet criteria!";
++        return;
++    }
++
++    if (password !== confirmPassword) {
++        matchMessage.style.color = "red";
++        matchMessage.textContent = "Passwords do not match!";
++    } else {
++        matchMessage.style.color = "green";
++        matchMessage.textContent = "Passwords match!";
++        alert("Password set successfully!");
++    }
++});
+diff --git a/templates/changepass.html b/templates/changepass.html
+new file mode 100644
+index 0000000..682dca5
+--- /dev/null
++++ b/templates/changepass.html
+@@ -0,0 +1,20 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>Change Password</title>
++</head>
++<body>
++    <h1>Change Password</h1>
++    <form method="post" action="/change-password/{{ token }}/">
++        {% csrf_token %}
++        <input type="hidden" name="unique_id" value="{{ unique_id }}">
++        <label for="new_password">New Password:</label>
++        <input type="password" id="new_password" name="new_password" required>
++        <label for="reconfirm_password">Confirm Password:</label>
++        <input type="password" id="reconfirm_password" name="reconfirm_password" required>
++        <button type="submit">Submit</button>
++    </form>
++</body>
++</html>
+\ No newline at end of file
+diff --git a/templates/dashboard.html b/templates/dashboard.html
+new file mode 100644
+index 0000000..51f0dda
+--- /dev/null
++++ b/templates/dashboard.html
+@@ -0,0 +1,43 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>D-POLL Dashboard</title>
++    {% load static %}
++    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
++</head>
++<body>
++    <header>
++        <div class="menu-icon" onclick="toggleMenu()">☰</div>
++        <h1>D-POLL</h1>
++    </header>
++
++    <div class="container">
++        <nav id="sidebar">
++            <ul>
++                <li><button onclick="navigate('votersList')">Voters List</button></li>
++                <li><button onclick="navigate('candidatesList')">Candidates List</button></li>
++                <li><button onclick="navigate('castVote')">Cast your Vote</button></li>
++                <li><button onclick="navigate('result')">Result</button></li>
++                <li><button onclick="navigate('editDetails')">Edit / Update Details</button></li>
++                <li><button onclick="logout()">Logout</button></li>
++            </ul>
++        </nav>
++
++        <main>
++            <div class="profile">
++                <img src="profile-placeholder.png" alt="User Profile">
++                <div class="details">
++                    <p><strong>Unique Id :</strong> ************</p>
++                    <p><strong>Name :</strong> John Due <span class="age">Age : 49</span></p>
++                    <p><strong>Email :</strong> johndue@gmail.com</p>
++                    <p><strong>Phone no :</strong> 8978549562</p>
++                </div>
++            </div>
++        </main>
++    </div>
++
++    <script src="{% static 'js/dashboard.js' %}"></script>
++</body>
++</html>
+diff --git a/templates/forgot.html b/templates/forgot.html
+index 57d1590..1ce2e7a 100644
+--- a/templates/forgot.html
++++ b/templates/forgot.html
+@@ -4,20 +4,14 @@
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Forgot Password</title>
+-    {% load static %}
+-    <link rel="stylesheet" type="text/css" href="{% static 'css/forgot.css' %}">
+-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ </head>
+ <body>
+-
+-    <div class="container">
+-        <h2>Forgot Password</h2>
+-        <p>Enter your email to receive a password reset link.</p>
+-        <input type="email" id="email" placeholder="Enter your email" required>
+-        <button id="reset-btn">Reset Password</button>
+-        <p id="response"></p>
+-    </div>
+-
+-    <script src="{% static 'js/forgot.js' %}"></script>
++    <h1>Forgot Password</h1>
++    <form method="post" action="/forgot/">
++        {% csrf_token %}
++        <label for="unique_id">Unique ID:</label>
++        <input type="text" id="unique_id" name="unique_id" required>
++        <button type="submit">Submit</button>
++    </form>
+ </body>
+-</html>
++</html>
+\ No newline at end of file
+diff --git a/templates/otp.html b/templates/otp.html
+new file mode 100644
+index 0000000..e69de29
+diff --git a/templates/password.html b/templates/password.html
+index e69de29..1c1fbe6 100644
+--- a/templates/password.html
++++ b/templates/password.html
+@@ -0,0 +1,31 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>Set Password - D-POLL</title>
++    {% load static %}
++    <link rel="stylesheet" type="text/css" href="{% static 'css/password.css' %}">
++</head>
++<body>
++    <div class="container">
++        <div class="header">
++        <h1 >D-POLL</h1>
++        </div>
++        <p>Create a password with the following criteria: 8 characters minimum with lowercase, uppercase, symbol, digit, and alphabet</p>
++        
++        <label for="password">Password</label>
++        <input type="password" id="password" placeholder="Enter password">
++        <small id="password-requirements">Minimum 8 characters with required types</small>
++
++        <label for="confirm-password">Confirm Password</label>
++        <input type="password" id="confirm-password" placeholder="Re-enter password">
++
++        <small id="match-message">Must Match the above password</small>
++
++        <button id="confirm-btn">Confirm</button>
++    </div>
++
++    <script src="{% static 'js/password.js' %}"></script>
++</body>
++</html>
+diff --git a/templates/password_reset_complete.html b/templates/password_reset_complete.html
+new file mode 100644
+index 0000000..d78e810
+--- /dev/null
++++ b/templates/password_reset_complete.html
+@@ -0,0 +1,2 @@
++<h1>Password Set</h1>
++<p>Your password has been set. You can <a href="{% url "login"%}" >login</a> now.</p>
+\ No newline at end of file
+diff --git a/templates/password_reset_confirm.html b/templates/password_reset_confirm.html
+new file mode 100644
+index 0000000..0dd38e2
+--- /dev/null
++++ b/templates/password_reset_confirm.html
+@@ -0,0 +1,16 @@
++{% extends "index.html"%}
++{% block title %}Reset your password{% endblock %}
++{%block content %}
++
++<h1>Reset your password</h1>
++{% if validlink %}
++<p>Please enter your new password twice:</p>
++<form actions="."method="post">
++  {{ form.as_p}}
++  {% csrf_token %}
++  <p><input type="submit" value="Change my password"/></p>
++</form>
++{%else %}
++<p>The password reset link was invalid,possibly because it has already been used. Please request a new password reset.</p>
++{& endif %}
++{% endblock %}
+\ No newline at end of file
+diff --git a/templates/register.html b/templates/register.html
+index 62cfe8c..724fe3a 100644
+--- a/templates/register.html
++++ b/templates/register.html
+@@ -1,3 +1,4 @@
++<!-- filepath: /c:/Users/ABHI/Desktop/DPOLL/dpoll/templates/register.html -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+@@ -17,36 +18,35 @@
+ </head>
+ <body class="bg-gray-100">
+     <header class="bg-blue-500 p-4">
+-        <h1 class="text-white text-2xl font-bold"onclick="window.location.href='{% url 'home' %}';">D-POLL</h1>
++        <h1 class="text-white text-2xl font-bold" onclick="window.location.href='{% url 'home' %}';">D-POLL</h1>
+     </header>
+-
++   
+     <main class="max-w-2xl mx-auto p-6 bg-white mt-6 rounded-lg shadow-md">
+         <h2 class="text-3xl font-bold mb-6">Registration Page</h2>
+ 
+         <section>
+             <h3 class="text-xl font-semibold mb-4">Personal Information</h3>
+-            <form>
++            <form method="post" enctype="multipart/form-data">
++                {% csrf_token %}
+                 <div class="mb-4">
+                     <label for="fullname" class="block text-gray-700">Full name</label>
+-                    <input id="fullname" type="text" placeholder="ex: Adam" class="w-full p-2 border border-gray-300 rounded">
++                    <input id="fullname" name="fullName" type="text" placeholder="ex: Adam" class="w-full p-2 border border-gray-300 rounded">
+                 </div>
+ 
+-                <!-- Email Input Field (Fixed) -->
+                 <div class="mb-4">
+                     <label class="block text-gray-700">Email address</label>
+                     <div class="relative">
+                         <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+-                        <input type="email" placeholder="       adrian@jsmastery.pro" 
++                        <input type="email" name="email" placeholder="       adrian@jsmastery.pro" 
+                             class="w-full p-2 pl-14 border border-gray-300 rounded">
+                     </div>
+                 </div>
+ 
+-                <!-- Phone Number Input Field (Fixed) -->
+                 <div class="mb-4">
+                     <label class="block text-gray-700">Phone number</label>
+                     <div class="relative">
+                         <i class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+-                        <input type="text" placeholder="     +00 0342 0453 34" 
++                        <input type="text" name="phone" placeholder="     +00 0342 0453 34" 
+                             class="w-full p-2 pl-14 border border-gray-300 rounded">
+                     </div>
+                 </div>
+@@ -54,21 +54,21 @@
+                 <div class="grid grid-cols-1 md-grid-cols-2 gap-4 mb-4">
+                     <div>
+                         <label for="dob" class="block text-gray-700">Date of birth</label>
+-                        <input id="dob" type="date" class="w-full p-2 border border-gray-300 rounded">
++                        <input id="dob" name="dateOfBirth" type="date" class="w-full p-2 border border-gray-300 rounded">
+                     </div>
+                     <div>
+                         <label class="block text-gray-700">Sex</label>
+                         <div class="flex space-x-4">
+                             <label class="flex items-center space-x-2">
+-                                <input type="radio" name="sex" class="form-radio text-blue-500">
++                                <input type="radio" name="sex" value="Male" class="form-radio text-blue-500">
+                                 <span>Male</span>
+                             </label>
+                             <label class="flex items-center space-x-2">
+-                                <input type="radio" name="sex" class="form-radio text-blue-500">
++                                <input type="radio" name="sex" value="Female" class="form-radio text-blue-500">
+                                 <span>Female</span>
+                             </label>
+                             <label class="flex items-center space-x-2">
+-                                <input type="radio" name="sex" class="form-radio text-blue-500">
++                                <input type="radio" name="sex" value="Other" class="form-radio text-blue-500">
+                                 <span>Other</span>
+                             </label>
+                         </div>
+@@ -77,14 +77,14 @@
+ 
+                 <div class="mb-4">
+                     <label for="address" class="block text-gray-700">Address</label>
+-                    <textarea id="address" class="w-full p-2 border border-gray-300 rounded"></textarea>
++                    <textarea id="address" name="address" class="w-full p-2 border border-gray-300 rounded"></textarea>
+                 </div>
+ 
+                 <h3 class="text-xl font-semibold mb-4">Identification and Verification</h3>
+ 
+                 <div class="mb-4">
+                     <label class="block text-gray-700">Identification type</label>
+-                    <select id="identificationInput" class="w-full p-2 border border-gray-300 rounded">
++                    <select id="identificationInput" name="identificationType" class="w-full p-2 border border-gray-300 rounded">
+                         <option value="" disabled selected>Select Identification Type</option>
+                         <option value="Aadhar Card">Aadhar Card</option>
+                         <option value="Voter ID">Voter ID</option>
+@@ -93,13 +93,13 @@
+ 
+                 <div class="mb-4">
+                     <label for="idNumber" class="block text-gray-700">Identification Number</label>
+-                    <input id="idNumber" type="text" placeholder="ex:1234567" class="w-full p-2 border border-gray-300 rounded">
++                    <input id="idNumber" name="identificationNumber" type="text" placeholder="ex:1234567" class="w-full p-2 border border-gray-300 rounded">
+                 </div>
+ 
+                 <div class="mb-4">
+                     <label class="block text-gray-700">Scanned Copy of Identification Document</label>
+                     <label class="border-2 border-dashed border-gray-300 p-4 rounded flex items-center justify-center cursor-pointer">
+-                        <input type="file" class="hidden">
++                        <input type="file" name="id_doc" class="hidden">
+                         <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
+                         <p class="text-gray-400">Click to upload or drag and drop</p>
+                     </label>
+@@ -108,7 +108,7 @@
+                 <div class="mb-4">
+                     <label class="block text-gray-700">Scanned Copy of a Valid Photo</label>
+                     <label class="border-2 border-dashed border-gray-300 p-4 rounded flex items-center justify-center cursor-pointer">
+-                        <input type="file" class="hidden">
++                        <input type="file" name="photo" class="hidden">
+                         <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
+                         <p class="text-gray-400">Click to upload or drag and drop</p>
+                     </label>
+@@ -116,7 +116,7 @@
+ 
+                 <div class="mb-4">
+                     <label class="flex items-center space-x-2">
+-                        <input type="checkbox" class="form-checkbox text-black">
++                        <input type="checkbox" name="consent" class="form-checkbox text-black">
+                         <span>I consent to the use and disclosure of my personal information for voting purposes.</span>
+                     </label>
+                 </div>
+@@ -129,12 +129,12 @@
+                 </div>
+ 
+                 <div class="mb-6">
+-                    <button class="w-full bg-blue-500 text-white p-2 rounded">Submit and continue</button>
++                    <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Submit and continue</button>
+                 </div>
+ 
+                 <div class="text-center">
+                     <p class="mb-2">Already Registered?</p>
+-                    <button class="bg-blue-500 text-white p-2 rounded"onclick="window.location.href='{% url 'login' %}';">Login</button>
++                    <button type="button" class="bg-blue-500 text-white p-2 rounded" onclick="window.location.href='{% url 'login' %}';">Login</button>
+                 </div>
+             </form>
+         </section>
+@@ -145,4 +145,4 @@
+     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ </body>
+-</html>
++</html>
+\ No newline at end of file
+-- 
+2.45.2.windows.1
+

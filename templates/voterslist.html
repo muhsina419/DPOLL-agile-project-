@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Voters List{% endblock title %}
+
+{% block styleUrl %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/voterslist.css' %}">
+{% endblock styleUrl %}
+
+
+{% block content %}
+<div class="main">
+    <h1>Voters List</h1>
+    <p>List of voters in the system</p>
+    <input type="text" placeholder="Search Voter" class="search-box">
+
+    <div class="table">
+        <div class="table-header">
+            <div>Photo</div>
+            <div>Unique Id</div>
+            <div>Name</div>
+        </div>
+        {% for voter in voters %}
+        <div class="table-row">
+          <div class="photo-cell">
+            <img src="{{ voter.photo.url }}" alt="Voter Photo" class="photo">
+          </div>
+          <div class="uid">{{ voter.unique_id }}</div>
+          <div class="name">{{ voter.full_name }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/voterslist.js' %}"></script>
+{% endblock script %}

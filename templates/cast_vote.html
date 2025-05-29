@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block cast %}
+  Cast Your Vote
+{% endblock cast %}
+
+{% block styleUrl %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/cast_vote.css' %}">
+{% endblock styleUrl %}
+
+{% block content %}
+<main class="voting-container">
+  <h2>Cast Your Vote</h2>
+  <p>Select a candidate and submit your vote.</p>
+
+  <form id="votingForm" class="voting-form">
+    <input type="hidden" id="uniqueId" value="{{ user.unique_id }}">
+
+    <table>
+      <thead>
+        <tr>
+          <th>SI No</th>
+          <th>Candidate Name</th>
+          <th>Avatar</th>
+          <th>Symbol</th>
+          <th>Vote</th>
+        </tr>
+      </thead>
+      <tbody id="candidateTableBody">
+        <!-- Rows will be dynamically added here -->
+      </tbody>
+    </table>
+
+    <div class="button-group">
+      <button type="submit" class="submit-btn" id="submitBtn">Submit Vote</button>
+      <button type="button" class="clear-btn" id="clearBtn">Clear</button>
+    </div>
+  </form>
+</main>
+{% endblock content %}
+
+{% block script %}
+  <script src="{% static 'js/cast_vote.js' %}"></script>
+{% endblock script %}

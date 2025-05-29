@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D-POLL Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+</head>
+<body
+    data-voters-list-url="{% url 'voters_list' %}"
+    data-candidates-list-url="{% url 'candidates_list' %}"
+    data-cast-vote-url="{% url 'cast_vote' %}"
+    data-results-url="{% url 'results' %}"
+    data-edit-details-url="{% url 'edit_details' %}"
+    data-logout-url="{% url 'logout' %}"
+>
+    <header>
+        {% block header %}
+            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+            <h1>D-POLL</h1>
+        {% endblock header %}
+    </header>
+
+    <div class="container">
+        <nav id="sidebar">
+            <ul>
+                <li><button onclick="navigate('votersList')">Voters List</button></li>
+                <li><button onclick="navigate('candidatesList')">Candidates List</button></li>
+                <li><button onclick="navigate('castVote')">Cast your Vote</button></li>
+                <li><button onclick="navigate('result')">Result</button></li>
+                <li><button onclick="navigate('editDetails')">Edit / Update Details</button></li>
+                <li><button onclick="logout()">Logout</button></li>
+            </ul>
+        </nav>
+
+        <main>
+            <div class="profile">
+                <img src="{{ user.photo }}" alt="User Profile" onerror="this.src='{% static 'images/image.png' %}'">
+                <div class="details">
+                    <p><strong>Unique Id :</strong> {{ user.unique_id }}</p>
+                    <p><strong>Name :</strong> {{ user.name }} </p>
+                    <p><strong>Age : </strong>{{ user.age }}</p>
+                    <p><strong>Email :</strong> {{ user.email }}</p>
+                    <p><strong>Phone no :</strong> {{ user.phone }}</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>

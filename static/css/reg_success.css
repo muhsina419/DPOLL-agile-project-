@@ -1,0 +1,94 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fff;
+  color: #111;
+  text-align: center;
+}
+
+.header {
+  background-color: #4a90e2;
+  color: white;
+  padding: 20px;
+  font-weight: bold;
+  font-size: 24px;
+  font-family: monospace;
+  letter-spacing: 2px;
+}
+
+.container {
+  margin: 50px auto;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.checkmark {
+  font-size: 48px;
+  color: #4a90e2;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.unique-id-box {
+  margin: 20px 0;
+}
+
+.id-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 300px;
+  margin: 10px auto;
+  background-color: #f9f9f9;
+}
+
+.icon {
+  font-size: 18px;
+}
+
+#uniqueId {
+  border: none;
+  background: none;
+  font-size: 16px;
+  width: 180px;
+  text-align: center;
+}
+
+#uniqueId:focus {
+  outline: none;
+}
+
+.note {
+  font-size: 14px;
+  color: #555;
+  margin-top: 20px;
+}
+
+.dashboard-btn {
+  margin-top: 30px;
+  padding: 10px 24px;
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.dashboard-btn:hover {
+  background: #357ab8;
+}

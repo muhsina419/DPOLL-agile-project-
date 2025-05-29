@@ -1,0 +1,29 @@
+{% extends 'base.html'%}
+{% load static%}
+
+{% block title %}<title>Vote Success | D-POLL</title>
+{% endblock title %}
+{% block styleUrl %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/voting_success.css' %}">
+{% endblock styleUrl %}
+  
+
+{% block content %}
+  <main class="success-container">
+    <div class="checkmark">✔️</div>
+    <h2>Thank You</h2>
+    <p class="success-text">Your Vote has been successfully recorded 🎉</p>
+
+    <div class="vote-info">
+      <div class="info-row"><span>Candidate Selected :</span> <span>Candidate Name</span></div>
+      <div class="info-row"><span>Transaction Id :</span> <span>1234567891011</span></div>
+      <div class="info-row"><span>Date And Time :</span> <span id="dateTime"></span></div>
+    </div>
+
+    <button onclick="returnToDashboard()">Return To Dashboard</button>
+  </main>
+{% endblock content %}
+{% block script %}
+<script src="{% static 'js/voting_success.js' %}"></script>
+{% endblock script %}
+
