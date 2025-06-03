@@ -1,4 +1,4 @@
-# 🗳️ dpoll: Decentralized Voting System
+# 🗳️ DPOLL: Decentralized Voting System
 
 > A secure, scalable, and user-friendly web application designed to modernize and safeguard the electoral process.
 
@@ -129,7 +129,7 @@ python manage.py runserver
 ## 🎥 Project Demo
 ```
 📺 **Video Demo**: 
-[Watch Here](link)  
+[Watch Here]()  
 
 ---
 
