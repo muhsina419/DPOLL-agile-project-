@@ -1,0 +1,21 @@
+{% load static%}
+
+{% block title %}Know Your Unique Id{% endblock title %}
+
+{% block styleUrl %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/unique.css' %}">
+{% endblock styleUrl %}
+
+{% block content %}
+<div class="unique-id-container">
+    <h2>Know Your Unique ID</h2>
+    <label for="phoneInput">Enter your registered phone number:</label>
+    <input type="text" id="phoneInput" placeholder="Phone Number" />
+    <button id="findUniqueIdBtn">Find Unique ID</button>
+    <div id="uniqueIdResult"></div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/unique_id.js' %}"></script>
+{% endblock script %}

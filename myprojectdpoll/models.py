@@ -117,7 +117,7 @@ class Candidate(models.Model):
     
 
 class Vote(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         Voter,
         on_delete=models.CASCADE,
         default=None,  # Set a default value for existing rows

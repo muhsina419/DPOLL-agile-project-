@@ -1,17 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password</title>
-</head>
+{% load static %}
+
+{% block title %}<title>Forgot Password</title>{% endblock title %}
+{% block styleUrl %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/forgot.css' %}">
+{% endblock styleUrl %}
+
+{% block content %}
 <body>
     <h1>Forgot Password</h1>
-    <form method="post" action="/forgot/">
-        {% csrf_token %}
-        <label for="unique_id">Unique ID:</label>
-        <input type="text" id="unique_id" name="unique_id" required>
-        <button type="submit">Submit</button>
-    </form>
+    <div id="step1">
+        <label for="uniqueId">Unique ID:</label>
+        <input type="text" id="uniqueId" name="unique_id" required>
+        <button type="button" id="send-otp-btn">Send OTP</button>
+    </div>
+    <div id="step2" style="display:none;">
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp" required>
+        <button type="button" id="verify-otp-btn">Verify OTP</button>
+    </div>
+    <div id="step3" style="display:none;">
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" name="new_password" required>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirm_password" required>
+        <button type="button" id="reset-password-btn">Reset Password</button>
+    </div>
+    <div id="response" style="margin-top: 1em; color: red;"></div>
 </body>
-</html>
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/forgot.js' %}"></script>
+{% endblock script %}

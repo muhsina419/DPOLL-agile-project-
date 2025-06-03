@@ -35,6 +35,9 @@ urlpatterns = [
     path('reg_failure/', views.reg_failure, name='reg_failure'),
     path('admin/poll-results/<int:poll_id>/', views.poll_results, name='poll_results'),
     path('admin/poll-results/<int:poll_id>/', views.poll_results, name='poll_results'),
+    path('get-unique-id/', views.get_unique_id, name='unique_id'),
+    path('unique-id/', views.unique_id_view, name='unique_id'),
+    
 ]
 
 # Add static file handling for development

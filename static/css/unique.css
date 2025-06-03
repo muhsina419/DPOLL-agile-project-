@@ -1,0 +1,32 @@
+.unique-id-container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-align: center;
+}
+.unique-id-container input {
+    width: 80%;
+    padding: 8px;
+    margin: 12px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.unique-id-container button {
+    padding: 8px 16px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.unique-id-container button:hover {
+    background: #0056b3;
+}
+#uniqueIdResult {
+    margin-top: 16px;
+    font-weight: bold;
+    color: #2d862d;
+}

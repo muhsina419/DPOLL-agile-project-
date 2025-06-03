@@ -234,29 +234,50 @@ logger = logging.getLogger(__name__)
 # **Password Validation**
 def validate_password(password):
     return bool(re.fullmatch(r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password))
-
 @csrf_exempt
 def set_password(request, unique_id):
     if request.method == "GET":
+        # Show the set password form (for registration or forgot password)
         return render(request, 'setpassword.html', {'unique_id': unique_id})
 
     if request.method == "POST":
-        password = request.POST.get("password")
-        if not password:
-            return JsonResponse({"error": "Password is required"}, status=400)
+        # Handle both JSON and form data
+        if request.content_type == "application/json":
+            try:
+                data = json.loads(request.body)
+                password = data.get("password")
+                confirm_password = data.get("confirm_password", password)  # fallback for registration
+            except Exception:
+                return JsonResponse({"error": "Invalid JSON data"}, status=400)
+        else:
+            password = request.POST.get("password")
+            confirm_password = request.POST.get("confirm_password", password)  # fallback for registration
 
+        if not password or not confirm_password:
+            return JsonResponse({"error": "Both password fields are required."}, status=400)
+        if password != confirm_password:
+            return JsonResponse({"error": "Passwords do not match."}, status=400)
         if not validate_password(password):
             return JsonResponse({
                 "error": "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
             }, status=400)
 
         try:
-            set_password_entry = SetPassword.objects.create(
+            # Update or create SetPassword entry
+            set_password_entry, created = SetPassword.objects.update_or_create(
                 unique_id=unique_id,
-                password=make_password(password)
+                defaults={"password": make_password(password)}
             )
-            set_password_entry.save()
-            return JsonResponse({"message": "Password successfully updated"}, status=200)
+
+            # Update password in Voter model as well
+            try:
+                voter = Voter.objects.get(unique_id=unique_id)
+                voter.password = make_password(password)
+                voter.save()
+            except Voter.DoesNotExist:
+                return JsonResponse({"error": "Voter not found."}, status=404)
+
+            return JsonResponse({"success": True, "message": "Password successfully updated"}, status=200)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
 
@@ -475,7 +496,6 @@ def polls_view(request):
 from django.contrib.auth.decorators import login_required
 import logging
 logger = logging.getLogger(__name__)
-
 @csrf_exempt
 def submit_vote(request):
     if request.method == "POST":
@@ -485,50 +505,107 @@ def submit_vote(request):
             candidate_id = data.get("candidate_id")
 
             if not user_unique_id or not candidate_id:
+                print("Missing unique_id or candidate_id")
                 return render(request, "voting_failure.html", {"error": "Missing unique_id or candidate_id"})
 
-            # Validate user and candidate
             try:
                 user = Voter.objects.get(unique_id=user_unique_id)
             except Voter.DoesNotExist:
+                print("User not found")
                 return render(request, "voting_failure.html", {"error": "User not found."})
 
             try:
                 candidate = Candidate.objects.get(id=candidate_id)
             except Candidate.DoesNotExist:
+                print("Candidate not found")
                 return render(request, "voting_failure.html", {"error": "Candidate not found."})
 
-            # Check if the user has already voted
             if Vote.objects.filter(user=user).exists():
+                print("Already voted")
                 return render(request, "voting_failure.html", {"error": "You have already voted."})
 
-            # Record the vote
             Vote.objects.create(user=user, candidate=candidate)
-        
-            # Increment the candidate's vote count
+            print("Vote created: ", vote )
             candidate.votes += 1
             candidate.save()
-            
-            # Update the has_voted field in UserProfile
+
             try:
                 user_profile = UserProfile.objects.get(unique_id=user_unique_id)
                 user_profile.has_voted = True
                 user_profile.save()
             except UserProfile.DoesNotExist:
+                print("User profile not found")
                 return render(request, "voting_failure.html", {"error": "User profile not found."})
 
-            # Prepare context for success page
             context = {
                 "candidate_name": candidate.name,
                 "transaction_id": Vote.objects.filter(user=user, candidate=candidate).last().id,
                 "date_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
+            print("Vote successful")
             return render(request, "voting_success.html", context)
         except json.JSONDecodeError:
+            print("Invalid JSON data")
             return render(request, "voting_failure.html", {"error": "Invalid JSON data"})
         except Exception as e:
+            print(f"Exception: {e}")
             return render(request, "voting_failure.html", {"error": f"An error occurred: {str(e)}"})
+    print("Invalid request method")
     return render(request, "voting_failure.html", {"error": "Invalid request method."})
+
+# @csrf_exempt
+# def submit_vote(request):
+#     if request.method == "POST":
+#         try:
+#             data = json.loads(request.body)
+#             user_unique_id = data.get("unique_id")
+#             candidate_id = data.get("candidate_id")
+
+#             if not user_unique_id or not candidate_id:
+#                 return render(request, "voting_failure.html", {"error": "Missing unique_id or candidate_id"})
+
+#             # Validate user and candidate
+#             try:
+#                 user = Voter.objects.get(unique_id=user_unique_id)
+#             except Voter.DoesNotExist:
+#                 return render(request, "voting_failure.html", {"error": "User not found."})
+
+#             try:
+#                 candidate = Candidate.objects.get(id=candidate_id)
+#             except Candidate.DoesNotExist:
+#                 return render(request, "voting_failure.html", {"error": "Candidate not found."})
+
+#             # Check if the user has already voted
+#             if Vote.objects.filter(user=user).exists():
+#                 return render(request, "voting_failure.html", {"error": "You have already voted."})
+
+#             # Record the vote
+#             Vote.objects.create(user=user, candidate=candidate)
+        
+#             # Increment the candidate's vote count
+#             candidate.votes += 1
+#             candidate.save()
+            
+#             # Update the has_voted field in UserProfile
+#             try:
+#                 user_profile = UserProfile.objects.get(unique_id=user_unique_id)
+#                 user_profile.has_voted = True
+#                 user_profile.save()
+#             except UserProfile.DoesNotExist:
+#                 return render(request, "voting_failure.html", {"error": "User profile not found."})
+
+#             # Prepare context for success page
+#             context = {
+#                 "candidate_name": candidate.name,
+#                 "transaction_id": Vote.objects.filter(user=user, candidate=candidate).last().id,
+#                 "date_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+#             }
+#             return render(request, "voting_success.html", context)
+#         except json.JSONDecodeError:
+#             return render(request, "voting_failure.html", {"error": "Invalid JSON data"})
+#         except Exception as e:
+#             return render(request, "voting_failure.html", {"error": f"An error occurred: {str(e)}"})
+#     return render(request, "voting_failure.html", {"error": "Invalid request method."})
 
 from django.shortcuts import render
 
@@ -671,7 +748,7 @@ def verify_otp_view(request):
                     if otp_flow == 'registration':
                         return JsonResponse({"message": "OTP Verified Successfully!", "redirect": f"/api/reg_success/?unique_id={unique_id}"})
                     else:  # login flow
-                        return JsonResponse({"message": "OTP Verified Successfully!", "redirect": "/api/login/"})
+                        return JsonResponse({"message": "OTP Verified Successfully!", "redirect": "/api/dashboard/"})
                 else:
                     return JsonResponse({"error": "Invalid OTP"}, status=400)
             else:
@@ -706,3 +783,19 @@ def poll_results(request, poll_id):
             'votes': vote_count
         })
     return render(request, 'poll_results.html', {'poll': poll, 'results': results})
+
+from django.http import JsonResponse
+from .models import Voter  # or UserProfile
+
+def unique_id_view(request):
+    return render(request, 'unique_id.html')
+
+def get_unique_id(request):
+    phone = request.GET.get('phone')
+    if not phone:
+        return JsonResponse({'error': 'Phone number required'}, status=400)
+    try:
+        voter = Voter.objects.get(phone=phone)  # <-- changed from phone_number to phone
+        return JsonResponse({'unique_id': voter.unique_id})
+    except Voter.DoesNotExist:
+        return JsonResponse({'error': 'No user found with this phone number'}, status=404)
