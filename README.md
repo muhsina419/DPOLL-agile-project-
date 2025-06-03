@@ -1,4 +1,4 @@
-# 🗳️ dpoll: Enhanced Decentralized Voting System
+# 🗳️ dpoll: Decentralized Voting System
 
 > A secure, scalable, and user-friendly web application designed to modernize and safeguard the electoral process.
 
@@ -6,7 +6,7 @@
 
 ## 📌 Project Overview
 
-`dpoll` is a decentralized digital voting platform built using Django and PostgreSQL with a modern frontend stack. The system is engineered to deliver secure, transparent, and accessible elections for institutions, organizations, or governments. It is cloud-deployment ready (AWS) and follows agile methodologies for easy scalability, extensibility, and maintenance.
+`dpoll` is a decentralized digital voting platform built using Django and PostgreSQL with a modern frontend stack. The system is engineered to deliver secure, transparent, and accessible elections for institutions, organizations, or governments. It is cloud-deployment ready and follows agile methodologies for easy scalability, extensibility, and maintenance.
 
 ---
 
@@ -59,6 +59,7 @@
 | Database    | PostgreSQL                                 |
 | Auth/SMS    | Twilio (OTP, SMS notifications)            |
 | Environment | dotenv (.env for secret keys)              |
+| Agile       | jira , trello , Google workspace           |
 | Deployment  | AWS-ready (EC2, RDS, etc.)                 |
 | Extras      | Blockchain module, Biometric integration (planned) |
 
