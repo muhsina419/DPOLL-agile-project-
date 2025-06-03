@@ -138,8 +138,7 @@ def register_view(request):
     return render(request, 'register.html')
 
 def reg_success(request,unique_id):
-    unique_id = request.GET.get("unique_id")
-    return render(request, 'reg_success.html')
+    return render(request, 'reg_success.html', {'unique_id' : unique_id})
 
 def reg_failure(request):
     return render(request, 'reg_failure.html')
@@ -357,7 +356,7 @@ def login_voter(request):
 def dashboard_view(request):
     user_data = request.session.get('user_data')
     if not user_data:
-        return redirect('/login/')  # Redirect to login if user data is not in session
+        return redirect('/api/login/')  # Redirect to login if user data is not in session
     return render(request, 'dashboard.html', {'user': user_data})
 
 from django.http import JsonResponse
@@ -524,7 +523,7 @@ def submit_vote(request):
                 print("Already voted")
                 return render(request, "voting_failure.html", {"error": "You have already voted."})
 
-            Vote.objects.create(user=user, candidate=candidate)
+            vote = Vote.objects.create(user=user, candidate=candidate)
             print("Vote created: ", vote )
             candidate.votes += 1
             candidate.save()
@@ -552,60 +551,6 @@ def submit_vote(request):
             return render(request, "voting_failure.html", {"error": f"An error occurred: {str(e)}"})
     print("Invalid request method")
     return render(request, "voting_failure.html", {"error": "Invalid request method."})
-
-# @csrf_exempt
-# def submit_vote(request):
-#     if request.method == "POST":
-#         try:
-#             data = json.loads(request.body)
-#             user_unique_id = data.get("unique_id")
-#             candidate_id = data.get("candidate_id")
-
-#             if not user_unique_id or not candidate_id:
-#                 return render(request, "voting_failure.html", {"error": "Missing unique_id or candidate_id"})
-
-#             # Validate user and candidate
-#             try:
-#                 user = Voter.objects.get(unique_id=user_unique_id)
-#             except Voter.DoesNotExist:
-#                 return render(request, "voting_failure.html", {"error": "User not found."})
-
-#             try:
-#                 candidate = Candidate.objects.get(id=candidate_id)
-#             except Candidate.DoesNotExist:
-#                 return render(request, "voting_failure.html", {"error": "Candidate not found."})
-
-#             # Check if the user has already voted
-#             if Vote.objects.filter(user=user).exists():
-#                 return render(request, "voting_failure.html", {"error": "You have already voted."})
-
-#             # Record the vote
-#             Vote.objects.create(user=user, candidate=candidate)
-        
-#             # Increment the candidate's vote count
-#             candidate.votes += 1
-#             candidate.save()
-            
-#             # Update the has_voted field in UserProfile
-#             try:
-#                 user_profile = UserProfile.objects.get(unique_id=user_unique_id)
-#                 user_profile.has_voted = True
-#                 user_profile.save()
-#             except UserProfile.DoesNotExist:
-#                 return render(request, "voting_failure.html", {"error": "User profile not found."})
-
-#             # Prepare context for success page
-#             context = {
-#                 "candidate_name": candidate.name,
-#                 "transaction_id": Vote.objects.filter(user=user, candidate=candidate).last().id,
-#                 "date_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-#             }
-#             return render(request, "voting_success.html", context)
-#         except json.JSONDecodeError:
-#             return render(request, "voting_failure.html", {"error": "Invalid JSON data"})
-#         except Exception as e:
-#             return render(request, "voting_failure.html", {"error": f"An error occurred: {str(e)}"})
-#     return render(request, "voting_failure.html", {"error": "Invalid request method."})
 
 from django.shortcuts import render
 
@@ -744,9 +689,8 @@ def verify_otp_view(request):
                     del request.session['otp_valid_until']
                     if 'otp_flow' in request.session:
                         del request.session['otp_flow']
-                    # THIS IS WHERE THE REDIRECT IS SET:
                     if otp_flow == 'registration':
-                        return JsonResponse({"message": "OTP Verified Successfully!", "redirect": f"/api/reg_success/?unique_id={unique_id}"})
+                        return JsonResponse({"message": "OTP Verified Successfully!", "redirect": f"/api/reg_success/{unique_id}"})
                     else:  # login flow
                         return JsonResponse({"message": "OTP Verified Successfully!", "redirect": "/api/dashboard/"})
                 else:
