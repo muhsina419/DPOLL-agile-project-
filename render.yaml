@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: dpoll-web
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn dpoll.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: dpoll.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: your-render-url.onrender.com
