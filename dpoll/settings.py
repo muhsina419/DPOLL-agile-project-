@@ -20,7 +20,7 @@ SECRET_KEY = 'django-insecure-k7ksj(mpf6o63d(1qe6&9+by4@i++mq0lm*p#fj9)aqu_+&@=x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = ['dpoll-agile-project.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
