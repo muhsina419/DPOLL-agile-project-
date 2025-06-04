@@ -14,3 +14,4 @@ tzdata==2025.1
 typing_extensions==4.12.2
 whitenoise==6.9.0  # For serving static files
 requests==2.32.3
+pyotp==2.9.0
