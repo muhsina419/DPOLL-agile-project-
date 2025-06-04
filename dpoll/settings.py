@@ -63,7 +63,7 @@ WSGI_APPLICATION = 'dpoll.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
-        con_max_age=600,
+        conN_max_age=600,
         ssl_require=True
     )
 }
