@@ -4,7 +4,7 @@ import urllib.parse
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 import urllib.parse
-imort dj_database_url
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
