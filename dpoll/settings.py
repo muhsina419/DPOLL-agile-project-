@@ -81,6 +81,9 @@ database_url = os.getenv('DATABASE_URL')
 print("DATABASE_URL:", database_url)
 if not database_url:
     raise ValueError("DATABASE_URL environment variable is not set")
+# Encode the URL to handle special characters
+database_url = urllib.parse.quote(database_url, safe=':/?=&')
+print("Encoded DATABASE_URL:", database_url)
 DATABASES = {
     'default': dj_database_url.config(default=database_url)
 }
