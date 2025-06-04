@@ -5,7 +5,6 @@ from django.conf.urls.static import static  # Import static
 from myprojectdpoll import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('login/', views.login_voter, name='login_voter'),
     path('register/', views.register_view, name='register'),
