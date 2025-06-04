@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = os.getenv("SECRET_KEY", "your-default-secret-key")  # Better to use env
 DEBUG = os.getenv("DEBUG", "False") == "True"
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]  # Add your Render domain here for production
+ALLOWED_HOSTS = [ 'dpoll-agile-project.onrender.com' ,"localhost", "127.0.0.1"]  # Add your Render domain here for production
 
 # Application definition
 INSTALLED_APPS = [
@@ -102,6 +102,8 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "password")
 # Misc
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 APPEND_SLASH = True
-CSRF_TRUSTED_ORIGINS = [os.getenv("FRONTEND_URL", "http://127.0.0.1:8000")]
+CSRF_TRUSTED_ORIGINS = ['https://dpoll-agile-project.onrender.com']
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:8000")
+
+FRONTEND_URL = "https://dpoll-agile-project.onrender.com"
+
