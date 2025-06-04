@@ -3,7 +3,6 @@ import os
 import urllib.parse
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
-import mongoengine
 import urllib.parse
 
 
