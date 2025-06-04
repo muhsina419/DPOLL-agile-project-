@@ -4,7 +4,7 @@ import urllib.parse
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 import urllib.parse
-
+imort dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -78,19 +78,14 @@ username = urllib.parse.quote_plus("abhinandana")
 password = urllib.parse.quote_plus("Abhi@nandu8589")  # Encodes special characters
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "abhinandu8589",
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
-}
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+database url=os.getenv('DATABASE_URL')
+print("DATABASE_URL:", database_url)
+if not database_url:
+    raise ValueError("DATABASE_URL environment variable is not set")
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
