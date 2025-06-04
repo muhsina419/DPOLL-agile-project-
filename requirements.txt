@@ -16,3 +16,5 @@ whitenoise==6.9.0  # For serving static files
 requests==2.32.3
 pyotp==2.9.0
 pillow==10.0.0
+dj-database-url
+psycopg2-binary
