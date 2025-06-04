@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_views
 from myprojectdpoll.views import home  # Import the homepage view
 
 urlpatterns = [
-
+    path('admin/', admin.site.urls),
     # Root URL for homepage
     path('', home, name='home'),
 
