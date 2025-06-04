@@ -7,7 +7,6 @@ Django==4.2.10  # Compatible with djangorestframework
 djangorestframework==3.15.2
 gunicorn==21.2.0  # Recommended for production server on Render
 idna==3.10
-psycopg2==2.9.10  # PostgreSQL database adapter
 python-dotenv==1.0.1
 sqlparse==0.5.3
 tzdata==2025.1
