@@ -77,14 +77,12 @@ load_dotenv()  # Load environment variables
 username = urllib.parse.quote_plus("abhinandana")
 password = urllib.parse.quote_plus("Abhi@nandu8589")  # Encodes special characters
 
-
-
-database url=os.getenv('DATABASE_URL')
+database_url = os.getenv('DATABASE_URL')
 print("DATABASE_URL:", database_url)
 if not database_url:
     raise ValueError("DATABASE_URL environment variable is not set")
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(default=database_url)
 }
 
 AUTH_PASSWORD_VALIDATORS = [
